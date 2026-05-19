@@ -9,7 +9,7 @@ const tabs = [
 
 export default function TabBar() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 glass-strong border-t border-border">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border">
       <div className="max-w-5xl mx-auto flex justify-around items-center h-16">
         {tabs.map(({ to, icon: Icon, label }) => (
           <NavLink
@@ -19,7 +19,7 @@ export default function TabBar() {
           >
             {({ isActive }) => (
               <div className={`flex flex-col items-center gap-0.5 text-xs font-medium transition-colors ${
-                isActive ? 'text-romance' : 'text-muted hover:text-text-dim'
+                isActive ? 'text-primary' : 'text-muted hover:text-primary/70'
               }`}>
                 <Icon size={22} strokeWidth={isActive ? 2.5 : 1.5} />
                 <span>{label}</span>

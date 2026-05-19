@@ -1,12 +1,20 @@
-import { Flame, ChevronRight, Undo2, CheckCircle2, Zap } from 'lucide-react'
+import { ChevronRight, Undo2, CheckCircle2 } from 'lucide-react'
 import { SKILLS, getCategoryRanges } from '../data/curriculum'
 
 const categoryColors = {
-  Beginner: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-  Intermediate: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  Advanced: 'bg-violet-500/20 text-violet-400 border-violet-500/30',
-  Elite: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-  Supporting: 'bg-slate-500/20 text-slate-400 border-slate-500/30',
+  Beginner: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+  Intermediate: 'bg-blue-100 text-blue-700 border-blue-200',
+  Advanced: 'bg-violet-100 text-violet-700 border-violet-200',
+  Elite: 'bg-amber-100 text-amber-700 border-amber-200',
+  Supporting: 'bg-gray-100 text-gray-600 border-gray-200',
+}
+
+const categoryBgColors = {
+  Beginner: 'bg-emerald-500',
+  Intermediate: 'bg-blue-500',
+  Advanced: 'bg-violet-500',
+  Elite: 'bg-amber-500',
+  Supporting: 'bg-gray-400',
 }
 
 export default function Home({ app }) {
@@ -22,13 +30,10 @@ export default function Home({ app }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-display font-bold tracking-tight">
-            <span className="text-romance">Forma</span>
-          </h1>
+          <h1 className="text-3xl font-display font-bold tracking-tight text-primary">Forma</h1>
           <p className="text-sm text-muted mt-0.5">Your calisthenics journey</p>
         </div>
         <div className="flex items-center gap-3 text-sm text-text-dim">
-          <Flame size={16} className="text-romance" />
           <span>{completedCount} / {totalSkills} skills</span>
         </div>
       </div>
@@ -46,12 +51,12 @@ export default function Home({ app }) {
 
       {/* Undo Toast */}
       {hasUndo && (
-        <div className="glass rounded-xl p-3 flex items-center gap-3 border-l-2 border-romance/50">
-          <Undo2 size={16} className="text-romance shrink-0" />
+        <div className="glass rounded-xl p-3 flex items-center gap-3 border-l-2 border-accent/40">
+          <Undo2 size={16} className="text-accent shrink-0" />
           <span className="text-sm text-text-dim flex-1 truncate">{lastAction.action}</span>
           <button
             onClick={undoLast}
-            className="px-3 py-1.5 rounded-lg bg-romance/10 text-romance text-xs font-semibold hover:bg-romance/20 transition-colors shrink-0"
+            className="px-3 py-1.5 rounded-lg bg-accent/10 text-accent text-xs font-semibold hover:bg-accent/20 transition-colors shrink-0"
           >
             Undo
           </button>
@@ -59,7 +64,7 @@ export default function Home({ app }) {
       )}
 
       {/* Current Skill Card */}
-      <div className="glass-strong rounded-2xl p-6 glow-wine">
+      <div className="glass-strong rounded-2xl p-6 glow-primary">
         <div className="flex items-start justify-between mb-4">
           <div>
             <p className="text-xs text-muted uppercase tracking-widest mb-1">Current Skill</p>
@@ -67,7 +72,7 @@ export default function Home({ app }) {
               {currentSkill?.category}
             </span>
           </div>
-          <span className="text-4xl font-display font-bold text-white/10">
+          <span className="text-4xl font-display font-bold text-gray">
             {String(state.currentIndex + 1).padStart(2, '0')}
           </span>
         </div>
@@ -77,7 +82,7 @@ export default function Home({ app }) {
 
         <button
           onClick={completeSkill}
-          className="w-full py-3.5 rounded-xl bg-gradient-to-r from-wine to-wine-light text-white font-display font-semibold hover:from-wine-light hover:to-wine transition-all glow-wine text-base"
+          className="w-full py-3.5 rounded-xl bg-primary text-white font-display font-semibold hover:bg-primary-light transition-colors text-base"
         >
           Complete & Advance
         </button>
@@ -90,14 +95,14 @@ export default function Home({ app }) {
             s => s.index >= range.start && s.index <= range.end
           ).length
           const percent = range.count > 0 ? (completedInRange / range.count) * 100 : 0
-          const catColor = categoryColors[range.category] || categoryColors.Supporting
+          const dotColor = categoryBgColors[range.category] || categoryBgColors.Supporting
           return (
             <div key={i} className="glass rounded-xl p-3 text-center">
               <p className="text-xs text-muted mb-1">{range.category}</p>
               <p className="text-lg font-bold">{completedInRange}</p>
               <p className="text-[10px] text-muted">/ {range.count}</p>
-              <div className="mt-2 h-1 rounded-full bg-white/5 overflow-hidden">
-                <div className="h-full rounded-full bg-romance/60" style={{ width: `${percent}%` }} />
+              <div className="mt-2 h-1 rounded-full bg-gray overflow-hidden">
+                <div className={`h-full rounded-full ${dotColor} opacity-70`} style={{ width: `${percent}%` }} />
               </div>
             </div>
           )
@@ -113,7 +118,7 @@ export default function Home({ app }) {
               const skill = SKILLS[s.skillIndex]
               return (
                 <div key={i} className="flex items-center gap-3 text-sm py-1">
-                  <CheckCircle2 size={14} className="text-emerald-500/60 shrink-0" />
+                  <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
                   <span className="text-muted text-xs w-20 shrink-0">{s.date}</span>
                   <span className="flex-1 truncate">{skill?.name || `Skill ${s.skillIndex + 1}`}</span>
                   <span className="text-xs text-muted">{skill?.category}</span>
