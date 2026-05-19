@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import { useFormaState } from './hooks/useFormaState'
 import Layout from './components/Layout'
 import Home from './pages/Home'
@@ -15,7 +15,7 @@ function App() {
   // }
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home app={app} />} />
@@ -23,7 +23,7 @@ function App() {
           <Route path="/profile" element={<Profile app={app} />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
