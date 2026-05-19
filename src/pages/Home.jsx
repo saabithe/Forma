@@ -1,5 +1,7 @@
-import { ChevronRight, Undo2, CheckCircle2 } from 'lucide-react'
+import { useState } from 'react'
+import { ChevronRight, Undo2, CheckCircle2, Play } from 'lucide-react'
 import { SKILLS, getCategoryRanges } from '../data/curriculum'
+import WorkoutSession from './WorkoutSession'
 
 const categoryColors = {
   Beginner: 'bg-emerald-100 text-emerald-700 border-emerald-200',
@@ -19,11 +21,26 @@ const categoryBgColors = {
 
 export default function Home({ app }) {
   const { state, currentSkill, totalSkills, completedCount, progressPercent, completeSkill, undoLast } = app
+  const [showWorkout, setShowWorkout] = useState(false)
   const hasUndo = state.undoHistory.length > 0
   const lastAction = state.undoHistory[state.undoHistory.length - 1]
   const ranges = getCategoryRanges()
 
   const currentCatColor = categoryColors[currentSkill?.category] || categoryColors.Supporting
+  const workout = currentSkill?.workout
+
+  if (showWorkout && currentSkill) {
+    return (
+      <WorkoutSession
+        skill={currentSkill}
+        onComplete={() => {
+          completeSkill()
+          setShowWorkout(false)
+        }}
+        onClose={() => setShowWorkout(false)}
+      />
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -78,13 +95,34 @@ export default function Home({ app }) {
         </div>
 
         <h2 className="text-2xl font-display font-bold mb-2">{currentSkill?.name}</h2>
-        <p className="text-text-dim text-sm mb-6">{currentSkill?.description}</p>
+        <p className="text-text-dim text-sm mb-4">{currentSkill?.description}</p>
+
+        {/* Workout Preview */}
+        {workout && (
+          <div className="flex items-center gap-4 mb-5 text-sm">
+            <div className="flex items-center gap-1.5 text-muted">
+              <span className="font-medium">{workout.sets}</span> sets
+            </div>
+            <span className="text-gray-300">&middot;</span>
+            <div className="flex items-center gap-1.5 text-muted">
+              {workout.type === 'hold' ? (
+                <><span className="font-medium">{workout.holdSeconds}s</span> hold</>
+              ) : (
+                <><span className="font-medium">{workout.reps}</span> reps</>
+              )}
+            </div>
+            <span className="text-gray-300">&middot;</span>
+            <div className="flex items-center gap-1.5 text-muted">
+              <span className="font-medium">{workout.restSeconds}s</span> rest
+            </div>
+          </div>
+        )}
 
         <button
-          onClick={completeSkill}
-          className="w-full py-3.5 rounded-xl bg-primary text-white font-display font-semibold hover:bg-primary-light transition-colors text-base"
+          onClick={() => setShowWorkout(true)}
+          className="w-full py-3.5 rounded-xl bg-primary text-white font-display font-semibold hover:bg-primary-light transition-colors text-base flex items-center justify-center gap-2"
         >
-          Complete & Advance
+          <Play size={18} /> Start Workout
         </button>
       </div>
 
