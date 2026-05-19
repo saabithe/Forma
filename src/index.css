@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  --color-wine: #660033;
+  --color-wine-light: #8a0044;
+  --color-wine-dark: #4d0026;
+  --color-romance: #E673AC;
+  --color-leaf: #469110;
+  --color-leaf-light: #5cb316;
+  --color-forest: #00520A;
+  --color-bg: #0a0a0f;
+  --color-surface: rgba(255, 255, 255, 0.04);
+  --color-surface-hover: rgba(255, 255, 255, 0.07);
+  --color-muted: #6b7280;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-text: #e5e7eb;
+  --color-text-dim: #9ca3af;
+  --color-accent: #660033;
+  --color-accent-glow: rgba(102, 0, 51, 0.3);
+  --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-display: 'Poppins', 'Outfit', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(102, 0, 51, 0.15), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(70, 145, 16, 0.05), transparent);
+  min-height: 100vh;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+}
+
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.glow-wine {
+  box-shadow: 0 0 20px rgba(102, 0, 51, 0.3), 0 0 60px rgba(102, 0, 51, 0.1);
+}
+
+.progress-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-wine), var(--color-romance));
+  transition: width 0.6s ease;
+  box-shadow: 0 0 12px rgba(102, 0, 51, 0.5);
+}
+
+.category-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 999px;
+}
