@@ -4,14 +4,15 @@ import Layout from './components/Layout'
 import Home from './pages/Home'
 import Roadmap from './pages/Roadmap'
 import Profile from './pages/Profile'
-import Onboarding from './pages/Onboarding'
 
 function App() {
   const app = useFormaState()
 
-  if (!app.state.user?.assessed) {
-    return <Onboarding onComplete={app.completeAssessment} />
-  }
+  // Assessment temporarily disabled — users go straight to the app
+  // To re-enable: uncomment the lines below and import Onboarding
+  // if (!app.state.user?.assessed) {
+  //   return <Onboarding onComplete={app.completeAssessment} />
+  // }
 
   return (
     <BrowserRouter>
