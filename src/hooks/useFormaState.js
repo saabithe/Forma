@@ -1,19 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { loadState, saveState } from '../lib/storage'
-import { SKILLS, getSkill, getNextSkillIndex } from '../data/curriculum'
-
-const MAX_UNDO_HISTORY = 10
-
-function pushUndo(state, action) {
-  const snapshot = {
-    currentIndex: state.currentIndex,
-    completedSkills: [...state.completedSkills],
-    sessions: [...state.sessions],
-  }
-  const history = [...state.undoHistory, { action, snapshot }]
-  if (history.length > MAX_UNDO_HISTORY) history.shift()
-  return history
-}
+import { SKILLS } from '../data/curriculum'
+import { useWorkoutEngine } from './useWorkoutEngine'
+import { useProgression } from './useProgression'
+import { generateSessionId } from '../lib/progression'
+import { rateExercisePerformance, rateWorkout } from '../lib/progression'
 
 export function useFormaState() {
   const [state, setState] = useState(() => loadState())
@@ -22,40 +13,106 @@ export function useFormaState() {
     saveState(state)
   }, [state])
 
-  const currentSkill = useMemo(() => getSkill(state.currentIndex), [state.currentIndex])
+  // Sub-hooks
+  const { todaysWorkouts } = useWorkoutEngine(state)
+  const progression = useProgression(state, setState)
+
+  // Computed values
   const totalSkills = SKILLS.length
-  const completedCount = state.completedSkills.length
-  const progressPercent = totalSkills > 0 ? (completedCount / totalSkills) * 100 : 0
+  const masteredCount = (state.masteredSkills || []).length
+  const activeCount = (state.activeSkills || []).length
+  const progressPercent = totalSkills > 0 ? (masteredCount / totalSkills) * 100 : 0
 
-  const completeSkill = useCallback(() => {
+  // Get the primary workout (first active skill)
+  const primaryWorkout = todaysWorkouts[0] || null
+
+  /**
+   * Record a completed workout session
+   */
+  const recordWorkout = useCallback((skillId, phaseId, exerciseResults, duration) => {
+    const exerciseRatings = exerciseResults.map(e => e.performanceRating)
+    const overallRating = rateWorkout(exerciseRatings)
+
+    const session = {
+      id: generateSessionId(),
+      date: new Date().toISOString().slice(0, 10),
+      skillId,
+      phaseId,
+      exercises: exerciseResults,
+      overallRating,
+      duration,
+      userNotes: '',
+    }
+
     setState(prev => {
-      const alreadyCompleted = prev.completedSkills.some(s => s.index === prev.currentIndex)
-      let completedSkills = prev.completedSkills
-      if (!alreadyCompleted) {
-        completedSkills = [...prev.completedSkills, { index: prev.currentIndex, date: new Date().toISOString().slice(0, 10) }]
-      }
+      const newHistory = [...(prev.workoutHistory || []), session]
 
-      const session = {
-        date: new Date().toISOString().slice(0, 10),
-        skillIndex: prev.currentIndex,
-        completed: true,
-      }
+      // Update streak
+      const today = new Date().toISOString().slice(0, 10)
+      const lastDate = prev.streak?.lastWorkoutDate
+      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+      let newStreak = { ...prev.streak }
 
-      const nextIndex = getNextSkillIndex(prev.currentIndex)
+      if (lastDate === today) {
+        // Already worked out today, no change
+      } else if (lastDate === yesterday) {
+        newStreak.current = (newStreak.current || 0) + 1
+        newStreak.longest = Math.max(newStreak.longest || 0, newStreak.current)
+        newStreak.lastWorkoutDate = today
+      } else {
+        newStreak.current = 1
+        newStreak.longest = Math.max(newStreak.longest || 0, 1)
+        newStreak.lastWorkoutDate = today
+      }
 
       return {
         ...prev,
-        completedSkills,
-        sessions: [...prev.sessions, session],
-        currentIndex: nextIndex !== null ? nextIndex : prev.currentIndex,
-        undoHistory: pushUndo(prev, `Completed: ${SKILLS[prev.currentIndex]?.name}`),
+        workoutHistory: newHistory,
+        streak: newStreak,
       }
     })
   }, [])
 
+  /**
+   * Check and handle phase advancement after a workout
+   */
+  const checkAndAdvancePhase = useCallback((skillId) => {
+    const shouldAdvance = progression.checkPhaseAdvance(skillId)
+    if (shouldAdvance) {
+      progression.advancePhase(skillId)
+      return 'phase_advanced'
+    }
+
+    const levelUp = progression.checkLevelUp(skillId)
+    if (levelUp.met) {
+      progression.masterSkill(skillId)
+      return 'skill_mastered'
+    }
+
+    return null
+  }, [progression])
+
+  /**
+   * Update settings
+   */
+  const updateSettings = useCallback((patch) => {
+    setState(prev => ({ ...prev, settings: { ...prev.settings, ...patch } }))
+  }, [])
+
+  /**
+   * Reset all data
+   */
+  const resetAll = useCallback(() => {
+    localStorage.removeItem('forma_state')
+    setState(loadState())
+  }, [])
+
+  /**
+   * Undo last action (simplified for new system)
+   */
   const undoLast = useCallback(() => {
     setState(prev => {
-      if (prev.undoHistory.length === 0) return prev
+      if (!prev.undoHistory || prev.undoHistory.length === 0) return prev
       const history = [...prev.undoHistory]
       const last = history.pop()
       return {
@@ -66,43 +123,47 @@ export function useFormaState() {
     })
   }, [])
 
-  const updateSettings = useCallback((patch) => {
-    setState(prev => ({ ...prev, settings: { ...prev.settings, ...patch } }))
-  }, [])
+  /**
+   * Get skill status: 'locked' | 'available' | 'active' | 'mastered'
+   */
+  const getSkillStatus = useCallback((skillIndex) => {
+    const skill = SKILLS[skillIndex]
+    if (!skill) return 'locked'
 
-  const completeAssessment = useCallback((result) => {
-    setState(prev => ({
-      ...prev,
-      user: { assessed: true, level: result.level },
-      currentIndex: result.startIndex || 0,
-    }))
-  }, [])
+    const isMastered = (state.masteredSkills || []).some(m => m.skillId === skill.id)
+    if (isMastered) return 'mastered'
 
-  const resetAll = useCallback(() => {
-    localStorage.removeItem('forma_state')
-    setState(loadState())
-  }, [])
+    const isActive = (state.activeSkills || []).some(a => a.skillId === skill.id)
+    if (isActive) return 'active'
 
-  const jumpToSkill = useCallback((index) => {
-    setState(prev => ({
-      ...prev,
-      currentIndex: index,
-      undoHistory: pushUndo(prev, `Jumped to: ${SKILLS[index]?.name}`),
-    }))
-  }, [])
+    // Check if prerequisites are met (all previous skills mastered or index <= highest unlocked)
+    const highestUnlocked = state.roadmapProgress?.highestUnlockedIndex ?? 0
+    if (skillIndex <= highestUnlocked) return 'available'
+
+    return 'locked'
+  }, [state.masteredSkills, state.activeSkills, state.roadmapProgress])
 
   return {
     state,
-    currentSkill,
-    totalSkills,
-    completedCount,
-    progressPercent,
-    completeSkill,
-    undoLast,
-    updateSettings,
-    completeAssessment,
-    resetAll,
-    jumpToSkill,
     setState,
+
+    // Computed
+    totalSkills,
+    masteredCount,
+    activeCount,
+    progressPercent,
+    primaryWorkout,
+    todaysWorkouts,
+
+    // Actions
+    recordWorkout,
+    checkAndAdvancePhase,
+    updateSettings,
+    resetAll,
+    undoLast,
+    getSkillStatus,
+
+    // Progression (re-exported)
+    ...progression,
   }
 }

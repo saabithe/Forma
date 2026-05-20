@@ -1,29 +1,49 @@
+import { isLegacyState, migrateState } from './migration'
+
 const STORAGE_KEY = 'forma_state'
 
 const DEFAULT_STATE = {
   user: null,
-  currentIndex: 0, // index into SKILLS array — linear progression
-  completedSkills: [], // array of { index, date }
-  sessions: [], // array of { date, skillIndex, completed }
-  undoHistory: [], // stack of { action, snapshot }
+  activeSkills: [],      // [{ skillId, currentPhaseIndex, startedDate }]
+  masteredSkills: [],    // [{ skillId, masteredDate }]
+  roadmapProgress: { highestUnlockedIndex: 0 },
+  workoutHistory: [],    // [{ id, date, skillId, phaseId, exercises, overallRating, duration, userNotes }]
+  streak: { current: 0, longest: 0, lastWorkoutDate: null },
+  undoHistory: [],
   settings: {
     sound: true,
     timerBeep: true,
   },
+  version: 2,
 }
 
 export function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return { ...DEFAULT_STATE }
+
     const parsed = JSON.parse(raw)
+
+    // Check if this is legacy state and migrate
+    if (parsed && typeof parsed.currentIndex === 'number' && !parsed.version) {
+      if (isLegacyState(parsed)) {
+        const migrated = migrateState(parsed)
+        saveState(migrated)
+        return migrated
+      }
+    }
+
     return {
       ...DEFAULT_STATE,
       ...parsed,
+      activeSkills: parsed.activeSkills || [],
+      masteredSkills: parsed.masteredSkills || [],
+      roadmapProgress: parsed.roadmapProgress || { highestUnlockedIndex: 0 },
+      workoutHistory: parsed.workoutHistory || [],
+      streak: parsed.streak || { current: 0, longest: 0, lastWorkoutDate: null },
       settings: { ...DEFAULT_STATE.settings, ...parsed.settings },
       undoHistory: parsed.undoHistory || [],
-      completedSkills: parsed.completedSkills || [],
-      sessions: parsed.sessions || [],
+      version: 2,
     }
   } catch {
     return { ...DEFAULT_STATE }
@@ -47,7 +67,7 @@ export function exportState() {
   const a = document.createElement('a')
   const now = new Date()
   a.href = url
-  a.download = `forma-backup-${now.toISOString().slice(0,10)}.json`
+  a.download = `forma-backup-${now.toISOString().slice(0, 10)}.json`
   a.click()
   URL.revokeObjectURL(url)
 }
