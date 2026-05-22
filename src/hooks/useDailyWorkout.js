@@ -16,14 +16,6 @@ function estimateDuration(exercises) {
   return Math.round(totalSeconds / 60)
 }
 
-// Get the number of days between two dates
-function daysBetween(dateStr1, dateStr2) {
-  if (!dateStr1 || !dateStr2) return 0
-  const d1 = new Date(dateStr1)
-  const d2 = new Date(dateStr2)
-  return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24))
-}
-
 // Adjust a single prescription based on exercise history and routine progression config
 function adjustFromHistory(prescription, exerciseHistory, progression) {
   if (!exerciseHistory || exerciseHistory.length === 0) return { ...prescription }
@@ -62,21 +54,23 @@ export function useDailyWorkout(state) {
     const schedule = daily?.schedule || DEFAULT_SCHEDULE
     const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
 
-    // Determine current day index by calendar progression
-    let currentDayIndex = daily?.currentDayIndex ?? 0
-    if (daily?.lastWorkoutDate) {
-      const daysPassed = daysBetween(daily.lastWorkoutDate, today)
-      if (daysPassed > 0) {
-        currentDayIndex = (currentDayIndex + daysPassed) % schedule.length
-      }
-    }
+    // Schedule only advances on completion (recordDailyWorkout increments currentDayIndex)
+    // No calendar-based advancement — missing a day doesn't skip anything
+    const currentDayIndex = daily?.currentDayIndex ?? 0
+    const completedToday = daily?.completedTodayDate === today
 
+    // Build the current day's routine
     const dayType = schedule[currentDayIndex]
     const routine = getRoutine(dayType)
 
-    if (!routine) return { todaysRoutine: null, dayType, dayIndex: currentDayIndex, isRestDay: true }
+    // Also build the NEXT day's routine (for optional quests after completing today)
+    const nextDayIndex = (currentDayIndex + 1) % schedule.length
+    const nextDayType = schedule[nextDayIndex]
+    const nextRoutine = getRoutine(nextDayType)
 
-    // Rest day
+    if (!routine) return { todaysRoutine: null, dayType, dayIndex: currentDayIndex, isRestDay: true, completedToday: false }
+
+    // Rest day — always mark as completed (auto-advance)
     if (routine.isRestDay) {
       const enrichedSuggestions = (routine.suggestions || []).map(item => {
         const exercise = getExercise(item.exerciseId)
@@ -89,6 +83,7 @@ export function useDailyWorkout(state) {
       return {
         todaysRoutine: null,
         isRestDay: true,
+        completedToday: true,
         dayType,
         dayIndex: currentDayIndex,
         routineName: routine.name,
@@ -99,36 +94,59 @@ export function useDailyWorkout(state) {
     // Workout day
     const totalSessions = daily?.totalSessions || 0
     const difficulty = getDifficultyLevel(totalSessions)
-    const exerciseList = routine.exercises[difficulty] || routine.exercises.beginner
 
-    // Enrich exercises with definitions and adjust from history
-    const workoutHistory = daily?.workoutHistory || []
-    const enriched = exerciseList.map(item => {
-      const exercise = getExercise(item.exerciseId)
-      const exerciseHistory = workoutHistory.filter(h =>
-        h.exercises?.some(e => e.exerciseId === item.exerciseId)
-      ).slice(0, 5)
+    const buildEnrichedExercises = (routineObj) => {
+      const exerciseList = routineObj.exercises[difficulty] || routineObj.exercises.beginner
+      const workoutHistory = daily?.workoutHistory || []
 
-      // Extract last session's per-exercise data
-      const lastSessionData = exerciseHistory[0]?.exercises?.find(e => e.exerciseId === item.exerciseId)
-      const adjusted = adjustFromHistory(item.prescription, lastSessionData ? [lastSessionData] : [], routine.progression)
+      return exerciseList.map(item => {
+        const exercise = getExercise(item.exerciseId)
+        const exerciseHistory = workoutHistory.filter(h =>
+          h.exercises?.some(e => e.exerciseId === item.exerciseId)
+        ).slice(0, 5)
 
-      return {
-        ...adjusted,
-        exerciseId: item.exerciseId,
-        name: exercise?.name || item.exerciseId,
-        execution: exercise?.execution || null,
-        warmupNote: exercise?.warmupNote || null,
-        targetMuscles: exercise?.targetMuscles || [],
-        type: adjusted.type || item.prescription.type,
+        const lastSessionData = exerciseHistory[0]?.exercises?.find(e => e.exerciseId === item.exerciseId)
+        const adjusted = adjustFromHistory(item.prescription, lastSessionData ? [lastSessionData] : [], routineObj.progression)
+
+        return {
+          ...adjusted,
+          exerciseId: item.exerciseId,
+          name: exercise?.name || item.exerciseId,
+          execution: exercise?.execution || null,
+          warmupNote: exercise?.warmupNote || null,
+          targetMuscles: exercise?.targetMuscles || [],
+          type: adjusted.type || item.prescription.type,
+        }
+      })
+    }
+
+    const buildWarmup = (routineObj) => {
+      return (routineObj.warmup || []).map(id => {
+        const exercise = getExercise(id)
+        return exercise ? { exerciseId: id, name: exercise.name, type: exercise.type } : null
+      }).filter(Boolean)
+    }
+
+    const enriched = buildEnrichedExercises(routine)
+    const warmup = buildWarmup(routine)
+
+    // Build optional next workout
+    let optionalNext = null
+    if (completedToday && nextRoutine && !nextRoutine.isRestDay) {
+      const nextEnriched = buildEnrichedExercises(nextRoutine)
+      const nextWarmup = buildWarmup(nextRoutine)
+      optionalNext = {
+        id: nextRoutine.id,
+        name: nextRoutine.name,
+        description: nextRoutine.description,
+        emoji: nextRoutine.emoji,
+        exercises: nextEnriched,
+        warmup: nextWarmup,
+        estimatedDuration: estimateDuration(nextEnriched),
+        difficulty,
+        nextDayIndex,
       }
-    })
-
-    // Enrich warmup
-    const warmup = (routine.warmup || []).map(id => {
-      const exercise = getExercise(id)
-      return exercise ? { exerciseId: id, name: exercise.name, type: exercise.type } : null
-    }).filter(Boolean)
+    }
 
     return {
       todaysRoutine: {
@@ -142,9 +160,11 @@ export function useDailyWorkout(state) {
         difficulty,
       },
       isRestDay: false,
+      completedToday,
       dayType,
       dayIndex: currentDayIndex,
       totalSessions,
+      optionalNext,
     }
   }, [state?.dailyWorkout])
 }

@@ -80,8 +80,27 @@ export function useFormaState() {
           totalSessions: newTotalSessions,
           currentDayIndex: nextDayIndex,
           lastWorkoutDate: today,
+          completedTodayDate: today,
         },
         streak: newStreak,
+      }
+    })
+  }, [])
+
+  /**
+   * Skip a rest day — advance to the next day without recording a workout
+   */
+  const skipRestDay = useCallback(() => {
+    setState(prev => {
+      const daily = prev.dailyWorkout || {}
+      const schedule = daily.schedule || ['push', 'pull', 'legs', 'rest', 'upper', 'lower', 'rest']
+      const nextDayIndex = ((daily.currentDayIndex || 0) + 1) % schedule.length
+      return {
+        ...prev,
+        dailyWorkout: {
+          ...daily,
+          currentDayIndex: nextDayIndex,
+        },
       }
     })
   }, [])
@@ -220,6 +239,7 @@ export function useFormaState() {
 
     // Actions
     recordDailyWorkout,
+    skipRestDay,
     recordWorkout,
     checkAndAdvancePhase,
     updateSettings,

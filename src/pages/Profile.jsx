@@ -39,10 +39,10 @@ export default function Profile({ app }) {
       <div className="glass-strong rounded-2xl p-8 text-center glow-primary">
         <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center mb-4 shadow-lg">
           <span className="text-3xl font-display font-bold text-white">
-            {(state.user?.name || 'F')[0].toUpperCase()}
+            {(state.user?.name || 'S')[0].toUpperCase()}
           </span>
         </div>
-        <h2 className="text-xl font-display font-bold">{state.user?.name || 'Forma Athlete'}</h2>
+        <h2 className="text-xl font-display font-bold">{state.user?.name || 'SABITH THIRUNILATH'}</h2>
         <p className="text-sm text-muted mt-1">Level {Math.floor(masteredCount / 5) + 1}</p>
       </div>
 

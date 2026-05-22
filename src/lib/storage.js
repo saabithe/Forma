@@ -18,6 +18,7 @@ const DEFAULT_STATE = {
     schedule: ['push', 'pull', 'legs', 'rest', 'upper', 'lower', 'rest'],
     currentDayIndex: 0,
     lastWorkoutDate: null,
+    completedTodayDate: null,  // YYYY-MM-DD — tracks if today's workout is done
     workoutHistory: [],   // [{ id, date, dayType, exercises, overallRating, duration }]
     totalSessions: 0,
   },
