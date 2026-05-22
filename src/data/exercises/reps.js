@@ -964,6 +964,85 @@ export const REP_EXERCISES = {
     warmupNote: null,
   },
 
+  'bench-dips': {
+    id: 'bench-dips',
+    name: 'Bench Dips',
+    type: 'reps',
+    targetMuscles: ['triceps', 'anterior deltoids', 'upper chest'],
+    execution: {
+      setup: [
+        'Sit on the edge of a bench, chair, or sturdy surface',
+        'Place hands on the edge beside your hips, fingers wrapping over',
+        'Walk your feet forward and slide hips off the edge',
+        'Bent knees for easier variation, straight legs for harder',
+      ],
+      movement: [
+        'Lower your body by bending your elbows until they reach roughly 90 degrees',
+        'Your back should stay close to the bench',
+        'Push back up to full arm extension',
+        'Do NOT go below 90 degrees — stresses the shoulder joint',
+      ],
+      tempo: '2 seconds down, 0 second pause, 1 second up. Control the descent.',
+      breathing: 'Inhale as you lower, exhale as you push up.',
+      commonMistakes: [
+        'Going too deep — do not exceed 90 degrees of elbow bend',
+        'Shrugging shoulders — keep them down and back',
+        'Leaning too far forward — stay upright for tricep focus',
+        'Feet too close — adjust distance to control difficulty',
+      ],
+      mentalCues: [
+        'Scrape your back along the bench as you lower',
+        'Push the bench away from you',
+        'Squeeze your triceps at the top',
+      ],
+      formCheckpoints: [
+        { checkpoint: 'Elbows at 90 degrees at bottom', yes: 'Good depth', no: 'Do not go deeper' },
+        { checkpoint: 'Full lockout at top', yes: 'Complete rep', no: 'Extend arms fully' },
+      ],
+    },
+    warmupNote: 'Do 10 arm circles and 5 push-ups to warm up.',
+  },
+
+  'decline-pushups': {
+    id: 'decline-pushups',
+    name: 'Decline Push-ups',
+    type: 'reps',
+    targetMuscles: ['upper chest', 'anterior deltoids', 'triceps', 'core'],
+    execution: {
+      setup: [
+        'Place your feet on an elevated surface (bench, step, chair)',
+        'Hands on the floor slightly wider than shoulder-width',
+        'Body in a straight line from head to heels',
+        'The higher the surface, the harder the exercise',
+      ],
+      movement: [
+        'Lower your chest toward the ground by bending your elbows at 45 degrees',
+        'Touch or come within 1 inch of the ground',
+        'Push back up to full lockout',
+        'Keep hips level — do not sag or pike',
+      ],
+      tempo: '2 seconds down, 0 second pause, 1 second up.',
+      breathing: 'Inhale on the way down, exhale as you push up.',
+      commonMistakes: [
+        'Hips sagging — core must be tight',
+        'Elbows flared to 90 degrees — tuck to 45',
+        'Half reps — chest must reach the ground',
+        'Surface too high too soon — build up gradually',
+      ],
+      mentalCues: [
+        'Push the ground away from you',
+        'Think about your upper chest doing the work',
+        'Keep your body rigid like a plank',
+      ],
+      formCheckpoints: [
+        { checkpoint: 'Chest within 1 inch of ground', yes: 'Full ROM', no: 'Lower further' },
+        { checkpoint: 'Feet elevated', yes: 'Decline angle active', no: 'Raise feet higher' },
+        { checkpoint: 'Hips level', yes: 'Core engaged', no: 'Tighten core' },
+      ],
+    },
+    warmupNote: 'Do 10 incline push-ups first to warm up.',
+  },
+
   'pistol-squat-assisted': {
     id: 'pistol-squat-assisted',
     name: 'Assisted Pistol Squat',

@@ -3,6 +3,7 @@ import { loadState, saveState } from '../lib/storage'
 import { SKILLS } from '../data/curriculum'
 import { useWorkoutEngine } from './useWorkoutEngine'
 import { useProgression } from './useProgression'
+import { useDailyWorkout } from './useDailyWorkout'
 import { generateSessionId } from '../lib/progression'
 import { rateExercisePerformance, rateWorkout } from '../lib/progression'
 
@@ -16,6 +17,7 @@ export function useFormaState() {
   // Sub-hooks
   const { todaysWorkouts } = useWorkoutEngine(state)
   const progression = useProgression(state, setState)
+  const dailyWorkout = useDailyWorkout(state)
 
   // Computed values
   const totalSkills = SKILLS.length
@@ -27,7 +29,65 @@ export function useFormaState() {
   const primaryWorkout = todaysWorkouts[0] || null
 
   /**
-   * Record a completed workout session
+   * Record a completed daily workout session
+   */
+  const recordDailyWorkout = useCallback((dayType, exerciseResults, duration) => {
+    const exerciseRatings = exerciseResults.map(e => e.performanceRating)
+    const overallRating = rateWorkout(exerciseRatings)
+
+    const session = {
+      id: generateSessionId(),
+      date: new Date().toISOString().slice(0, 10),
+      dayType,
+      exercises: exerciseResults,
+      overallRating,
+      duration,
+    }
+
+    const today = new Date().toISOString().slice(0, 10)
+
+    setState(prev => {
+      const daily = prev.dailyWorkout || {}
+      const newHistory = [...(daily.workoutHistory || []), session]
+      const newTotalSessions = (daily.totalSessions || 0) + 1
+
+      // Advance to next day in schedule
+      const schedule = daily.schedule || ['push', 'pull', 'legs', 'rest', 'upper', 'lower', 'rest']
+      const nextDayIndex = ((daily.currentDayIndex || 0) + 1) % schedule.length
+
+      // Update streak
+      const lastDate = prev.streak?.lastWorkoutDate
+      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+      let newStreak = { ...prev.streak }
+
+      if (lastDate === today) {
+        // Already worked out today
+      } else if (lastDate === yesterday) {
+        newStreak.current = (newStreak.current || 0) + 1
+        newStreak.longest = Math.max(newStreak.longest || 0, newStreak.current)
+        newStreak.lastWorkoutDate = today
+      } else {
+        newStreak.current = 1
+        newStreak.longest = Math.max(newStreak.longest || 0, 1)
+        newStreak.lastWorkoutDate = today
+      }
+
+      return {
+        ...prev,
+        dailyWorkout: {
+          ...daily,
+          workoutHistory: newHistory,
+          totalSessions: newTotalSessions,
+          currentDayIndex: nextDayIndex,
+          lastWorkoutDate: today,
+        },
+        streak: newStreak,
+      }
+    })
+  }, [])
+
+  /**
+   * Record a completed skill workout session
    */
   const recordWorkout = useCallback((skillId, phaseId, exerciseResults, duration) => {
     const exerciseRatings = exerciseResults.map(e => e.performanceRating)
@@ -155,7 +215,11 @@ export function useFormaState() {
     primaryWorkout,
     todaysWorkouts,
 
+    // Daily workout
+    dailyWorkout,
+
     // Actions
+    recordDailyWorkout,
     recordWorkout,
     checkAndAdvancePhase,
     updateSettings,

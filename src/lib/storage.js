@@ -14,7 +14,14 @@ const DEFAULT_STATE = {
     sound: true,
     timerBeep: true,
   },
-  version: 2,
+  dailyWorkout: {
+    schedule: ['push', 'pull', 'legs', 'rest', 'upper', 'lower', 'rest'],
+    currentDayIndex: 0,
+    lastWorkoutDate: null,
+    workoutHistory: [],   // [{ id, date, dayType, exercises, overallRating, duration }]
+    totalSessions: 0,
+  },
+  version: 3,
 }
 
 export function loadState() {
@@ -43,7 +50,8 @@ export function loadState() {
       streak: parsed.streak || { current: 0, longest: 0, lastWorkoutDate: null },
       settings: { ...DEFAULT_STATE.settings, ...parsed.settings },
       undoHistory: parsed.undoHistory || [],
-      version: 2,
+      dailyWorkout: { ...DEFAULT_STATE.dailyWorkout, ...(parsed.dailyWorkout || {}) },
+      version: 3,
     }
   } catch {
     return { ...DEFAULT_STATE }
