@@ -313,8 +313,8 @@ export default function WorkoutSession({ workout, onDismiss, onClose }) {
 // ─── Execution Tips Panel ─────────────────────────────────────
 function ExecutionTipsPanel({ execution, onClose }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[110] bg-white border-t border-border rounded-t-2xl max-h-[60vh] overflow-y-auto">
-      <div className="sticky top-0 bg-white px-6 py-3 flex items-center justify-between border-b border-border">
+    <div className="fixed bottom-0 left-0 right-0 z-[110] bg-surface border-t border-border rounded-t-2xl max-h-[60vh] overflow-y-auto">
+      <div className="sticky top-0 bg-surface px-6 py-3 flex items-center justify-between border-b border-border">
         <p className="font-semibold text-sm">Execution Tips</p>
         <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-100">
           <X size={16} className="text-muted" />
