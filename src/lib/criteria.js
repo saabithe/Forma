@@ -28,7 +28,7 @@ export function checkPhaseCriteria(criteria, workoutHistory) {
  * @param {string} currentPhaseId - The current phase ID
  * @returns {{ met: boolean, progress: Array }}
  */
-export function checkLevelUpCriteria(levelUpCriteria, workoutHistory, currentPhaseId) {
+export function checkLevelUpCriteria(levelUpCriteria, workoutHistory, _currentPhaseId) {
   if (!levelUpCriteria || !levelUpCriteria.criteria) {
     return { met: false, progress: [] }
   }

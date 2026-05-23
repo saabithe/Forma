@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { Home, Route, User } from 'lucide-react'
+import { useTheme } from '../theme/ThemeContext'
 
 const tabs = [
   { to: '/', icon: Home, label: 'Dashboard' },
@@ -8,21 +9,33 @@ const tabs = [
 ]
 
 export default function TabBar() {
+  const { colors } = useTheme()
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border">
-      <div className="max-w-5xl mx-auto flex justify-around items-center h-16">
+    <nav
+      className="fixed bottom-4 left-4 right-4 z-50 glass rounded-lg border-2 border-[var(--color-border)] max-w-md mx-auto"
+      style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)' }}
+    >
+      <div className="flex justify-around items-center h-16 px-2">
         {tabs.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
             end={to === '/'}
+            className="flex-1"
           >
             {({ isActive }) => (
-              <div className={`flex flex-col items-center gap-0.5 text-xs font-medium transition-colors ${
-                isActive ? 'text-primary' : 'text-muted hover:text-primary/70'
+              <div className={`flex flex-col items-center gap-1 py-2 text-xs font-bold transition-all duration-200 ${
+                isActive
+                  ? `text-[${colors.accent}] drop-shadow-[0_0_8px_rgba(204,255,0,0.4)] scale-110`
+                  : 'text-[var(--color-text-dim)] hover:text-[var(--color-text)]'
               }`}>
-                <Icon size={22} strokeWidth={isActive ? 2.5 : 1.5} />
-                <span>{label}</span>
+                <Icon
+                  size={20}
+                  strokeWidth={isActive ? 3 : 2}
+                  className="transition-transform duration-200"
+                />
+                <span className="tracking-wider">{label}</span>
               </div>
             )}
           </NavLink>

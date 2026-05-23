@@ -19,7 +19,7 @@ const categoryStyles = {
 }
 
 export default function Roadmap({ app, onSelectSkill }) {
-  const { state, getSkillStatus } = app
+  const { getSkillStatus } = app
   const [search, setSearch] = useState('')
   const [expandedCat, setExpandedCat] = useState(null)
   const ranges = getCategoryRanges()

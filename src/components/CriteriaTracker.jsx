@@ -3,7 +3,6 @@ import { CheckCircle2, Circle } from 'lucide-react'
 export default function CriteriaTracker({ criteriaProgress }) {
   if (!criteriaProgress || criteriaProgress.length === 0) return null
 
-  const allMet = criteriaProgress.every(p => p.met)
 
   return (
     <div className="space-y-2">

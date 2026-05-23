@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Play, Flame, Target, Dumbbell, ChevronRight, Calendar, Coffee, CheckCircle2, ArrowRight } from 'lucide-react'
+import { Play, Flame, Target, ChevronRight, Calendar, Coffee, CheckCircle2, ArrowRight } from 'lucide-react'
 import { SKILLS } from '../data/curriculum'
 import WorkoutSession from './WorkoutSession'
 
 const categoryColors = {
-  Beginner: 'bg-emerald-100 text-emerald-700',
-  Intermediate: 'bg-blue-100 text-blue-700',
-  Advanced: 'bg-violet-100 text-violet-700',
-  Elite: 'bg-amber-100 text-amber-700',
-  Supporting: 'bg-gray-100 text-gray-600',
+  Beginner: 'border-emerald-500 text-emerald-400',
+  Intermediate: 'border-blue-500 text-blue-400',
+  Advanced: 'border-violet-500 text-violet-400',
+  Elite: 'border-amber-500 text-amber-400',
+  Supporting: 'border-gray-500 text-gray-400',
 }
 
 const dayColors = {
@@ -23,9 +23,7 @@ const dayColors = {
 
 export default function Home({ app }) {
   const {
-    state, masteredCount, activeCount,
-    totalSkills, progressPercent, recordDailyWorkout, skipRestDay,
-    addActiveSkill, getSkillStatus, dailyWorkout,
+    state, masteredCount, recordDailyWorkout, skipRestDay, dailyWorkout,
   } = app
   const [showWorkout, setShowWorkout] = useState(false)
   const [activeWorkoutRoutine, setActiveWorkoutRoutine] = useState(null)

@@ -23,7 +23,7 @@ function playBeep() {
       osc2.start()
       osc2.stop(ctx.currentTime + 0.2)
     }, 250)
-  } catch {}
+  } catch (e) { console.error(e); }
 }
 
 export function useWorkoutSession(exercises, onComplete) {
@@ -48,7 +48,7 @@ export function useWorkoutSession(exercises, onComplete) {
   useEffect(() => {
     if (currentExercise && phase === 'active') {
       if (currentExercise.type === 'hold') {
-        setTimer(currentExercise.targetHoldSeconds || 10)
+        setTimeout(() => setTimer(currentExercise.targetHoldSeconds || 10), 0)
       }
     }
   }, [currentExerciseIndex, phase])

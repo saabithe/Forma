@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, CheckCircle2, AlertTriangle } from 'lucide-react'
+import { ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react'
 
 export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
   const [expanded, setExpanded] = useState(false)
