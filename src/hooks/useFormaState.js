@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { loadState, saveState } from '../lib/storage'
 import { SKILLS } from '../data/curriculum'
 import { useWorkoutEngine } from './useWorkoutEngine'
 import { useProgression } from './useProgression'
 import { useDailyWorkout } from './useDailyWorkout'
 import { generateSessionId } from '../lib/progression'
-import { rateExercisePerformance, rateWorkout } from '../lib/progression'
+import { rateWorkout } from '../lib/progression'
 
 export function useFormaState() {
   const [state, setState] = useState(() => loadState())

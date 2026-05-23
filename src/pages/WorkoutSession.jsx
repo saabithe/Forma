@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { Play, Pause, SkipForward, CheckCircle2, ArrowRight, X, Minus, Plus, RotateCcw, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react'
+import { Play, SkipForward, CheckCircle2, ArrowRight, X, Minus, Plus, RotateCcw, Eye, EyeOff } from 'lucide-react'
+import { useWorkoutSession } from '../hooks/useWorkoutSession'
+import ExerciseCard from '../components/ExerciseCard'
 import { useWorkoutSession } from '../hooks/useWorkoutSession'
 import ExerciseCard from '../components/ExerciseCard'
 

@@ -62,7 +62,7 @@ export function loadState() {
 export function saveState(state) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  } catch {}
+  } catch (e) { console.error(e); }
 }
 
 export function clearState() {

@@ -67,7 +67,6 @@ export default function Results({ exerciseResults, totalTime, skillName, phaseNa
               <div className="space-y-1">
                 {result.sets.map((set, j) => {
                   const target = set.targetHoldSeconds || set.targetReps
-                  const actual = set.holdSeconds || set.reps
                   return (
                     <div key={j} className="flex items-center gap-2 text-xs">
                       <span className="text-muted w-12">Set {j + 1}</span>
