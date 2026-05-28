@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { loadState, saveState } from '../lib/storage'
 import { SKILLS } from '../data/curriculum'
 import { useWorkoutEngine } from './useWorkoutEngine'

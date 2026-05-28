@@ -1,21 +1,49 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Clash+Display:wght@400;600;700&display=swap');
 
 @theme {
-  --color-primary: #174D38;
-  --color-primary-light: #1e6648;
-  --color-primary-dark: #0f3628;
-  --color-accent: #4D1717;
-  --color-accent-light: #6b2222;
-  --color-gray: #CBCBCB;
-  --color-bg: #F2F2F2;
-  --color-surface: #FFFFFF;
-  --color-surface-hover: #F8F8F8;
-  --color-muted: #6b7280;
-  --color-border: rgba(0, 0, 0, 0.08);
-  --color-text: #1a1a1a;
-  --color-text-dim: #6b7280;
-  --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
-  --font-display: 'Poppins', 'Outfit', system-ui, sans-serif;
+  /* Brutalist theme colors inspired by Aerko_ */
+  --color-primary: #CCFF00;      /* Acid green */
+  --color-primary-light: #E5FF33;
+  --color-primary-dark: #B0E500;
+  --color-accent: #CCFF00;       /* Same as primary for brutalist consistency */
+  --color-accent-light: #E5FF33;
+  --color-gray: #A0A0A0;
+  --color-bg: #0A0A0A;           /* Dark brutalist background */
+  --color-surface: #141414;      /* Slightly lighter surface */
+  --color-surface-hover: #1A1A1A;
+  --color-muted: #666666;
+  --color-border: #333333;
+  --color-text: #FFFFFF;        /* Brutalist white text */
+  --color-text-dim: #A0A0A0;    /* Dimmed text for secondary elements */
+  --font-sans: 'JetBrains Mono', monospace;  /* Code-like font */
+  --font-display: 'Clash Display', 'JetBrains Mono', sans-serif;
+}
+
+/* Light mode brutalist theme */
+:root.light {
+  --color-bg: #FFFFFF;
+  --color-surface: #F5F5F5;
+  --color-surface-hover: #E8E8E8;
+  --color-text: #1A1A1A;
+  --color-text-dim: #666666;
+  --color-border: #CCCCCC;
+  --color-primary: #99CC00;
+  --color-primary-light: #B0E500;
+  --color-primary-dark: #88BB00;
+}
+
+/* Dark mode (default brutalist) */
+:root.dark {
+  --color-bg: #0A0A0A;
+  --color-surface: #141414;
+  --color-surface-hover: #1A1A1A;
+  --color-text: #FFFFFF;
+  --color-text-dim: #A0A0A0;
+  --color-border: #333333;
+  --color-primary: #CCFF00;
+  --color-primary-light: #E5FF33;
+  --color-primary-dark: #B0E500;
 }
 
 * {
@@ -32,39 +60,94 @@ body {
   min-height: 100vh;
 }
 
+/* Brutalist glass effect - more defined borders, less blur */
 .glass {
-  background: #FFFFFF;
-  border: 1px solid var(--color-border);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
 }
 
+.glass:hover {
+  border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 1px var(--color-primary),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Strong glass with more prominent borders */
 .glass-strong {
-  background: #FFFFFF;
-  border: 1px solid var(--color-border);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04);
+  background: var(--color-surface);
+  border: 3px solid var(--color-border);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.glass-hover:hover {
-  background: var(--color-surface-hover);
-  border-color: rgba(0, 0, 0, 0.12);
+.glass-strong:hover {
+  border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 2px var(--color-primary),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+/* Brutalist glow effect - sharp edges with acid green glow */
 .glow-primary {
-  box-shadow: 0 0 20px rgba(23, 77, 56, 0.15), 0 0 60px rgba(23, 77, 56, 0.05);
+  box-shadow:
+    0 0 0 2px var(--color-primary),
+    0 0 20px rgba(204, 255, 0, 0.3),
+    0 0 40px rgba(204, 255, 0, 0.1);
 }
 
+.gradient-text {
+  background: linear-gradient(90deg, #00DEFF, #D946EF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Brutalist progress bar - blocky design */
 .progress-bar {
-  height: 6px;
-  border-radius: 999px;
-  background: #e5e5e5;
-  overflow: hidden;
+  height: 8px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .progress-fill {
   height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
-  transition: width 0.6s ease;
+  background: var(--color-primary);
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.5);
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .category-dot {
@@ -73,13 +156,21 @@ body {
   border-radius: 999px;
 }
 
+/* Brutalist scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 12px;
+  height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
 }
 ::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 999px;
+  background: var(--color-primary);
+  border: 2px solid var(--color-border);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-light);
+  box-shadow: 0 0 0 1px var(--color-primary);
 }

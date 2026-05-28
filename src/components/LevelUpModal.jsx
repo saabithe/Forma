@@ -3,7 +3,7 @@ import { Trophy, ArrowRight } from 'lucide-react'
 export default function LevelUpModal({ skillName, criteriaProgress, onContinue }) {
   return (
     <div className="fixed inset-0 z-[200] bg-black/40 flex items-center justify-center p-6">
-      <div className="bg-white rounded-2xl max-w-sm w-full p-8 text-center space-y-6 shadow-2xl">
+      <div className="bg-surface rounded-2xl max-w-sm w-full p-8 text-center space-y-6 shadow-2xl border border-border">
         {/* Icon */}
         <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg">
           <Trophy size={40} className="text-white" />

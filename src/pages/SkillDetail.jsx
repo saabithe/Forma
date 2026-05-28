@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft, Play, Pause, CheckCircle2, Lock, Circle } from 'lucide-react'
-import { getTrainingPlan } from '../data/training-plans'
+import { ArrowLeft, Play, CheckCircle2, Lock } from 'lucide-react'
 import { SKILLS } from '../data/curriculum'
 import { checkLevelUpCriteria } from '../lib/criteria'
 import { computeSessionPrescriptions } from '../lib/progression'
