@@ -26,7 +26,7 @@ function playBeep() {
   } catch {}
 }
 
-export function useWorkoutSession(exercises, onComplete) {
+export function useWorkoutSession(exercises, onComplete, settings) {
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
   const [currentSet, setCurrentSet] = useState(1)
   const [phase, setPhase] = useState('intro') // intro, active, rest, between-exercises, complete
@@ -64,27 +64,27 @@ export function useWorkoutSession(exercises, onComplete) {
   useEffect(() => {
     if (phase !== 'active' || currentExercise?.type !== 'hold') return
     if (timer <= 0) {
-      playBeep()
+      if (settings?.timerBeep !== false) playBeep()
       return
     }
     intervalRef.current = setInterval(() => {
       setTimer(t => {
         if (t <= 1) {
           clearInterval(intervalRef.current)
-          playBeep()
+          if (settings?.timerBeep !== false) playBeep()
           return 0
         }
         return t - 1
       })
     }, 1000)
     return () => clearInterval(intervalRef.current)
-  }, [phase, currentExercise?.type])
+  }, [phase, currentExercise?.type, settings?.timerBeep])
 
   // Rest timer countdown
   useEffect(() => {
     if (phase !== 'rest') return
     if (restTimer <= 0) {
-      playBeep()
+      if (settings?.timerBeep !== false) playBeep()
       goNextSet()
       return
     }
@@ -92,14 +92,14 @@ export function useWorkoutSession(exercises, onComplete) {
       setRestTimer(t => {
         if (t <= 1) {
           clearInterval(intervalRef.current)
-          playBeep()
+          if (settings?.timerBeep !== false) playBeep()
           return 0
         }
         return t - 1
       })
     }, 1000)
     return () => clearInterval(intervalRef.current)
-  }, [phase, restTimer])
+  }, [phase, restTimer, settings?.timerBeep])
 
   const startWorkout = useCallback(() => {
     setPhase('active')

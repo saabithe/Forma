@@ -4,8 +4,9 @@ import { SKILLS } from '../data/curriculum'
 import { useWorkoutEngine } from './useWorkoutEngine'
 import { useProgression } from './useProgression'
 import { useDailyWorkout } from './useDailyWorkout'
-import { generateSessionId } from '../lib/progression'
-import { rateExercisePerformance, rateWorkout } from '../lib/progression'
+import { generateSessionId, rateExercisePerformance, rateWorkout } from '../lib/progression'
+import { getTrainingPlan } from '../data/training-plans'
+import { checkPhaseCriteria, checkLevelUpCriteria } from '../lib/criteria'
 
 export function useFormaState() {
   const [state, setState] = useState(() => loadState())
@@ -153,6 +154,95 @@ export function useFormaState() {
   }, [])
 
   /**
+   * Record a skill workout AND check phase advancement in a single state update.
+   * This avoids the stale closure issue where checkAndAdvancePhase reads old history.
+   * Returns a callback result: 'phase_advanced' | 'skill_mastered' | null
+   */
+  const recordSkillWorkoutAndCheck = useCallback((skillId, phaseId, exerciseResults, duration) => {
+    const exerciseRatings = exerciseResults.map(e => e.performanceRating)
+    const overallRating = rateWorkout(exerciseRatings)
+
+    const session = {
+      id: generateSessionId(),
+      date: new Date().toISOString().slice(0, 10),
+      skillId,
+      phaseId,
+      exercises: exerciseResults,
+      overallRating,
+      duration,
+      userNotes: '',
+    }
+
+    let result = null
+
+    setState(prev => {
+      const newHistory = [...(prev.workoutHistory || []), session]
+
+      // Update streak
+      const today = new Date().toISOString().slice(0, 10)
+      const lastDate = prev.streak?.lastWorkoutDate
+      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+      let newStreak = { ...prev.streak }
+
+      if (lastDate === today) {
+        // Already worked out today, no change
+      } else if (lastDate === yesterday) {
+        newStreak.current = (newStreak.current || 0) + 1
+        newStreak.longest = Math.max(newStreak.longest || 0, newStreak.current)
+        newStreak.lastWorkoutDate = today
+      } else {
+        newStreak.current = 1
+        newStreak.longest = Math.max(newStreak.longest || 0, 1)
+        newStreak.lastWorkoutDate = today
+      }
+
+      // Check phase advancement against the fresh history
+      const freshState = { ...prev, workoutHistory: newHistory, streak: newStreak }
+
+      const plan = getTrainingPlan(skillId)
+      const activeSkill = freshState.activeSkills?.find(a => a.skillId === skillId)
+      if (plan && activeSkill) {
+        const currentPhase = plan.phases[activeSkill.currentPhaseIndex]
+
+        // Check phase advance first
+        if (currentPhase?.advanceCriteria) {
+          const skillHistory = newHistory.filter(
+            h => h.skillId === skillId && h.phaseId === currentPhase.id
+          )
+          const shouldAdvance = checkPhaseCriteria(currentPhase.advanceCriteria, skillHistory)
+          if (shouldAdvance) {
+            const nextIndex = activeSkill.currentPhaseIndex + 1
+            if (nextIndex < plan.phases.length) {
+              freshState.activeSkills = freshState.activeSkills.map(a =>
+                a.skillId === skillId ? { ...a, currentPhaseIndex: nextIndex } : a
+              )
+              result = 'phase_advanced'
+            }
+          }
+        }
+
+        // Check level-up if in final phase and no phase advance happened
+        if (!result && activeSkill.currentPhaseIndex >= plan.phases.length - 1) {
+          const skillHistory = newHistory.filter(h => h.skillId === skillId)
+          const levelUp = checkLevelUpCriteria(plan.levelUpCriteria, skillHistory, currentPhase?.id)
+          if (levelUp.met) {
+            freshState.activeSkills = freshState.activeSkills.filter(a => a.skillId !== skillId)
+            freshState.masteredSkills = [
+              ...(freshState.masteredSkills || []),
+              { skillId, masteredDate: today },
+            ]
+            result = 'skill_mastered'
+          }
+        }
+      }
+
+      return freshState
+    })
+
+    return result
+  }, [])
+
+  /**
    * Check and handle phase advancement after a workout
    */
   const checkAndAdvancePhase = useCallback((skillId) => {
@@ -172,6 +262,20 @@ export function useFormaState() {
   }, [progression])
 
   /**
+   * Complete the initial assessment and set starting point
+   */
+  const completeAssessment = useCallback((result) => {
+    setState(prev => ({
+      ...prev,
+      user: { ...(prev.user || {}), assessed: true },
+      roadmapProgress: {
+        ...prev.roadmapProgress,
+        highestUnlockedIndex: Math.max(prev.roadmapProgress?.highestUnlockedIndex ?? 0, result.startIndex ?? 0),
+      },
+    }))
+  }, [])
+
+  /**
    * Update settings
    */
   const updateSettings = useCallback((patch) => {
@@ -184,22 +288,6 @@ export function useFormaState() {
   const resetAll = useCallback(() => {
     localStorage.removeItem('forma_state')
     setState(loadState())
-  }, [])
-
-  /**
-   * Undo last action (simplified for new system)
-   */
-  const undoLast = useCallback(() => {
-    setState(prev => {
-      if (!prev.undoHistory || prev.undoHistory.length === 0) return prev
-      const history = [...prev.undoHistory]
-      const last = history.pop()
-      return {
-        ...prev,
-        ...last.snapshot,
-        undoHistory: history,
-      }
-    })
   }, [])
 
   /**
@@ -241,10 +329,11 @@ export function useFormaState() {
     recordDailyWorkout,
     skipRestDay,
     recordWorkout,
+    recordSkillWorkoutAndCheck,
     checkAndAdvancePhase,
+    completeAssessment,
     updateSettings,
     resetAll,
-    undoLast,
     getSkillStatus,
 
     // Progression (re-exported)

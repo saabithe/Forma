@@ -67,8 +67,10 @@ export default function Home({ app }) {
           phaseName: workoutToShow.name,
           phaseDescription: workoutToShow.description,
           exercises: workoutToShow.exercises,
+          warmup: workoutToShow.warmup,
           estimatedDuration: workoutToShow.estimatedDuration,
         }}
+        settings={state.settings}
         onDismiss={(exerciseResults, duration) => {
           recordDailyWorkout(workoutToShow.id, exerciseResults, duration)
           setShowWorkout(false)

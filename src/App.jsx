@@ -6,16 +6,15 @@ import Home from './pages/Home'
 import Roadmap from './pages/Roadmap'
 import Profile from './pages/Profile'
 import SkillDetail from './pages/SkillDetail'
+import Onboarding from './pages/Onboarding'
 
 function App() {
   const app = useFormaState()
   const [selectedSkillId, setSelectedSkillId] = useState(null)
 
-  // Assessment temporarily disabled — users go straight to the app
-  // To re-enable: uncomment the lines below and import Onboarding
-  // if (!app.state.user?.assessed) {
-  //   return <Onboarding onComplete={app.completeAssessment} />
-  // }
+  if (!app.state.user?.assessed) {
+    return <Onboarding onComplete={app.completeAssessment} />
+  }
 
   return (
     <HashRouter>

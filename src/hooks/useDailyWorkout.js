@@ -1,20 +1,7 @@
 import { useMemo } from 'react'
 import { getRoutine, getDifficultyLevel, DEFAULT_SCHEDULE } from '../data/daily-routines'
 import { getExercise } from '../data/exercises'
-
-// Estimate duration for a set of exercises
-function estimateDuration(exercises) {
-  let totalSeconds = 0
-  for (const ex of exercises) {
-    if (ex.type === 'hold') {
-      totalSeconds += ex.targetHoldSeconds * ex.targetSets + (ex.restSeconds || 60) * (ex.targetSets - 1)
-    } else {
-      totalSeconds += (ex.targetReps || 10) * 3 * ex.targetSets + (ex.restSeconds || 60) * (ex.targetSets - 1)
-    }
-    totalSeconds += 30 // transition time
-  }
-  return Math.round(totalSeconds / 60)
-}
+import { estimateDuration } from '../lib/duration'
 
 // Adjust a single prescription based on exercise history and routine progression config
 function adjustFromHistory(prescription, exerciseHistory, progression) {

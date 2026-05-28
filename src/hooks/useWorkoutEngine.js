@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { getTrainingPlan } from '../data/training-plans'
 import { computeSessionPrescriptions } from '../lib/progression'
 import { getExercise } from '../data/exercises'
+import { estimateDuration } from '../lib/duration'
 
 /**
  * Generate today's workout for all active skills
@@ -52,27 +53,4 @@ export function useWorkoutEngine(state) {
   }, [state.activeSkills, state.workoutHistory])
 
   return { todaysWorkouts }
-}
-
-/**
- * Estimate workout duration in minutes
- */
-function estimateDuration(exercises) {
-  let totalSeconds = 0
-  for (const ex of exercises) {
-    if (ex.type === 'hold') {
-      // Hold time per set + rest between sets
-      const holdTime = (ex.targetHoldSeconds || 10) * (ex.targetSets || 3)
-      const restTime = (ex.restSeconds || 60) * ((ex.targetSets || 3) - 1)
-      totalSeconds += holdTime + restTime
-    } else {
-      // Approximate 3 seconds per rep + rest between sets
-      const repTime = (ex.targetReps || 10) * 3 * (ex.targetSets || 3)
-      const restTime = (ex.restSeconds || 60) * ((ex.targetSets || 3) - 1)
-      totalSeconds += repTime + restTime
-    }
-  }
-  // Add 30s buffer for transitions
-  totalSeconds += 30 * exercises.length
-  return Math.ceil(totalSeconds / 60)
 }

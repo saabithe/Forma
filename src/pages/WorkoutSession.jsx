@@ -37,7 +37,8 @@ function TimerCircle({ current, total, label }) {
   )
 }
 
-export default function WorkoutSession({ workout, onDismiss, onClose }) {
+export default function WorkoutSession({ workout, onDismiss, onClose, settings }) {
+  const [warmupDone, setWarmupDone] = useState(false)
   const {
     currentExerciseIndex, currentExercise, currentSet, phase, timer, reps,
     restTimer, setResults, exerciseResults, notes, showExecutionTips,
@@ -46,7 +47,52 @@ export default function WorkoutSession({ workout, onDismiss, onClose }) {
     incrementReps, decrementReps, setNotes, setShowExecutionTips,
     setFormQualityMet, setTimer,
     totalExercises, isLastExercise,
-  } = useWorkoutSession(workout.exercises, null)
+  } = useWorkoutSession(workout.exercises, null, settings)
+
+  // ─── WARMUP PHASE ──────────────────────────────────────────
+  if (phase === 'intro' && workout.warmup?.length > 0 && !warmupDone) {
+    return (
+      <div className="fixed inset-0 z-[100] bg-bg flex flex-col">
+        <div className="px-6 py-4 flex items-center justify-between border-b border-border">
+          <div>
+            <p className="text-xs text-muted uppercase tracking-wider">Warmup</p>
+            <h1 className="text-xl font-display font-bold">{workout.phaseName || workout.skillId}</h1>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100">
+            <X size={18} className="text-muted" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-6 py-6">
+          <p className="text-sm text-muted mb-4">Get your body ready. Complete these mobility drills before starting.</p>
+          <div className="space-y-2">
+            {workout.warmup.map((ex, i) => (
+              <div key={i} className="glass rounded-xl p-4 flex items-center gap-3">
+                <span className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-500">
+                  {i + 1}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{ex.name}</p>
+                  <p className="text-xs text-muted">
+                    {ex.type === 'hold' ? `${ex.targetHoldSeconds || 30}s hold` : `${ex.targetReps || 10} reps`}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="px-6 py-4 border-t border-border">
+          <button
+            onClick={() => setWarmupDone(true)}
+            className="w-full py-3.5 rounded-xl bg-primary text-white font-display font-semibold hover:bg-primary-light transition-colors flex items-center justify-center gap-2"
+          >
+            <Play size={18} /> Ready — Start Workout
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   // ─── INTRO PHASE ───────────────────────────────────────────
   if (phase === 'intro') {
