@@ -7,6 +7,7 @@ import Roadmap from './pages/Roadmap'
 import Profile from './pages/Profile'
 import SkillDetail from './pages/SkillDetail'
 import Onboarding from './pages/Onboarding'
+import Progress from './pages/Progress'
 
 function App() {
   const app = useFormaState()
@@ -25,6 +26,7 @@ function App() {
             <Roadmap app={app} onSelectSkill={setSelectedSkillId} />
           } />
           <Route path="/profile" element={<Profile app={app} />} />
+          <Route path="/progress" element={<Progress app={app} />} />
         </Route>
       </Routes>
 

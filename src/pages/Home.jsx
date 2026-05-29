@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Play, Flame, Target, ChevronRight, Calendar, Coffee, CheckCircle2, ArrowRight } from 'lucide-react'
 import { SKILLS } from '../data/curriculum'
 import WorkoutSession from './WorkoutSession'
+import CalendarHeatmap from '../components/CalendarHeatmap'
+import { getSessionPRs } from '../lib/progress-stats'
 
 const categoryColors = {
   Beginner: 'border-emerald-500 text-emerald-400',
@@ -260,6 +262,9 @@ export default function Home({ app }) {
         </div>
       </div>
 
+      {/* Calendar Heatmap */}
+      <CalendarHeatmap state={state} />
+
       {/* Skill Training (secondary) */}
       {hasActiveSkills && (
         <div className="space-y-3">
@@ -328,6 +333,7 @@ export default function Home({ app }) {
           <div className="space-y-2">
             {recentSessions.map((s, i) => {
               const skill = SKILLS.find(sk => sk.id === s.skillId)
+              const sessionPRs = getSessionPRs(state, s.exercises)
               const ratingColors = {
                 success: 'text-emerald-500',
                 partial: 'text-amber-500',
@@ -341,6 +347,9 @@ export default function Home({ app }) {
                   }`} />
                   <span className="text-muted text-xs w-20 shrink-0">{s.date}</span>
                   <span className="flex-1 truncate">{skill?.name || s.skillId || s.dayType || 'Workout'}</span>
+                  {sessionPRs.length > 0 && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary font-bold animate-pulse">PR</span>
+                  )}
                   <span className={`text-xs font-medium ${ratingColors[s.overallRating] || 'text-muted'}`}>
                     {s.overallRating}
                   </span>

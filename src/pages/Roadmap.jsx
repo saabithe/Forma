@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { CheckCircle2, Circle, ChevronRight, Search, Lock, Play, Dumbbell } from 'lucide-react'
+import { CheckCircle2, Circle, ChevronRight, Search, Lock, Play, Dumbbell, LayoutList, Network } from 'lucide-react'
 import { SKILLS, getCategoryRanges } from '../data/curriculum'
+import SkillTree from '../components/SkillTree'
 
 const categoryColors = {
   Beginner: 'emerald',
@@ -22,6 +23,7 @@ export default function Roadmap({ app, onSelectSkill }) {
   const { getSkillStatus } = app
   const [search, setSearch] = useState('')
   const [expandedCat, setExpandedCat] = useState(null)
+  const [viewMode, setViewMode] = useState('list') // 'list' | 'tree'
   const ranges = getCategoryRanges()
 
   const filteredSkills = search
@@ -37,6 +39,20 @@ export default function Roadmap({ app, onSelectSkill }) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-display font-bold tracking-tight text-primary">Roadmap</h1>
+        <div className="flex gap-1 glass rounded-lg p-1">
+          <button
+            onClick={() => setViewMode('list')}
+            className={`p-1.5 rounded transition-colors ${viewMode === 'list' ? 'bg-primary text-black' : 'text-muted hover:text-primary'}`}
+          >
+            <LayoutList size={16} />
+          </button>
+          <button
+            onClick={() => setViewMode('tree')}
+            className={`p-1.5 rounded transition-colors ${viewMode === 'tree' ? 'bg-primary text-black' : 'text-muted hover:text-primary'}`}
+          >
+            <Network size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Search */}
@@ -75,8 +91,13 @@ export default function Roadmap({ app, onSelectSkill }) {
         </div>
       )}
 
-      {/* Category sections */}
-      {!filteredSkills && categories.map(cat => {
+      {/* Tree View */}
+      {!filteredSkills && viewMode === 'tree' && (
+        <SkillTree skills={SKILLS} getSkillStatus={getSkillStatus} onSelectSkill={onSelectSkill} />
+      )}
+
+      {/* Category sections (List View) */}
+      {!filteredSkills && viewMode === 'list' && categories.map(cat => {
         const range = ranges.find(r => r.category === cat)
         if (!range) return null
         const catColor = categoryColors[cat]

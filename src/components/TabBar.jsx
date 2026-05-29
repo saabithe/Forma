@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import { Home, Route, User } from 'lucide-react'
+import { Home, Route, User, TrendingUp } from 'lucide-react'
 import { useTheme } from '../theme/ThemeContext'
 
 const tabs = [
   { to: '/', icon: Home, label: 'Dashboard' },
   { to: '/roadmap', icon: Route, label: 'Roadmap' },
+  { to: '/progress', icon: TrendingUp, label: 'Progress' },
   { to: '/profile', icon: User, label: 'Profile' },
 ]
 
