@@ -1,80 +1,71 @@
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
+import { useMemo } from 'react'
 
-const CHART_THEME = {
-  line: '#CCFF00',
-  lineSecondary: '#666666',
-  grid: '#333333',
-  tooltipBg: '#141414',
-  text: '#FFFFFF',
-  textDim: '#A0A0A0',
-}
+export default function ProgressChart({ data }) {
+  const chart = useMemo(() => {
+    if (!data || data.length === 0) return null
 
-function CustomTooltip({ active, payload, label }) {
-  if (!active || !payload?.length) return null
+    const isHold = data[0]?.type === 'hold'
+    const padding = { top: 20, right: 20, bottom: 30, left: 45 }
+    const width = 600
+    const height = 280
+    const plotW = width - padding.left - padding.right
+    const plotH = height - padding.top - padding.bottom
+
+    const allValues = data.flatMap(d => [d.actual, d.target])
+    const maxVal = Math.max(...allValues, 1)
+
+    const xStep = data.length > 1 ? plotW / (data.length - 1) : plotW
+    const toX = (i) => padding.left + i * xStep
+    const toY = (val) => padding.top + plotH - (val / maxVal) * plotH
+
+    const actualPath = data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${toX(i)} ${toY(d.actual)}`).join(' ')
+    const targetPath = data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${toX(i)} ${toY(d.target)}`).join(' ')
+    const points = data.map((d, i) => ({ x: toX(i), y: toY(d.actual), val: d.actual }))
+
+    const yTicks = 5
+    const yStep = maxVal / yTicks
+    const yTickValues = Array.from({ length: yTicks + 1 }, (_, i) => Math.round(i * yStep))
+    const labelInterval = data.length <= 6 ? 1 : data.length <= 12 ? 2 : Math.ceil(data.length / 6)
+
+    return { width, height, padding, plotW, plotH, actualPath, targetPath, points, toX, toY, yTickValues, labelInterval, isHold, maxVal }
+  }, [data])
+
+  if (!chart) return null
+
+  const { width, height, padding, plotW, plotH, actualPath, targetPath, points, toX, toY, yTickValues, labelInterval, isHold } = chart
+
   return (
-    <div className="rounded-lg px-3 py-2 text-xs border border-border"
-      style={{ background: CHART_THEME.tooltipBg }}
-    >
-      <p className="text-muted mb-1">{label}</p>
-      {payload.map((entry, i) => (
-        <p key={i} style={{ color: entry.stroke }} className="font-medium">
-          {entry.name}: {entry.value}{entry.payload?.type === 'hold' ? 's' : ''}
-        </p>
+    <svg viewBox={`0 0 ${width} ${height}`} className="w-full" style={{ height: 280 }}>
+      {/* Grid lines */}
+      {yTickValues.map((val, i) => (
+        <g key={i}>
+          <line x1={padding.left} y1={toY(val)} x2={padding.left + plotW} y2={toY(val)} stroke="var(--color-border)" strokeDasharray="3 3" />
+          <text x={padding.left - 8} y={toY(val) + 4} textAnchor="end" fill="var(--color-text-dim)" fontSize="10" fontFamily="var(--font-sans)">
+            {val}{isHold ? 's' : ''}
+          </text>
+        </g>
       ))}
-    </div>
-  )
-}
 
-export default function ProgressChart({ data, exerciseName }) {
-  if (!data || data.length === 0) return null
+      {/* X-axis labels */}
+      {data.map((d, i) => (
+        i % labelInterval === 0 && (
+          <text key={i} x={toX(i)} y={height - 5} textAnchor="middle" fill="var(--color-text-dim)" fontSize="9" fontFamily="var(--font-sans)">
+            {formatShortDate(d.date)}
+          </text>
+        )
+      ))}
 
-  const isHold = data[0]?.type === 'hold'
-  const unit = isHold ? 'seconds' : 'reps'
+      {/* Target line (dashed) */}
+      <path d={targetPath} fill="none" stroke="#666666" strokeWidth="1.5" strokeDasharray="6 3" />
 
-  const formattedData = data.map(d => ({
-    ...d,
-    label: formatShortDate(d.date),
-  }))
+      {/* Actual line */}
+      <path d={actualPath} fill="none" stroke="var(--color-primary)" strokeWidth="2" />
 
-  return (
-    <div className="w-full" style={{ height: 280 }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={formattedData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke={CHART_THEME.grid} vertical={false} />
-          <XAxis
-            dataKey="label"
-            tick={{ fill: CHART_THEME.textDim, fontSize: 10 }}
-            tickLine={false}
-            axisLine={{ stroke: CHART_THEME.grid }}
-          />
-          <YAxis
-            tick={{ fill: CHART_THEME.textDim, fontSize: 10 }}
-            tickLine={false}
-            axisLine={false}
-            width={35}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Line
-            type="monotone"
-            dataKey="target"
-            stroke={CHART_THEME.lineSecondary}
-            strokeWidth={1.5}
-            strokeDasharray="6 3"
-            dot={false}
-            name="Target"
-          />
-          <Line
-            type="monotone"
-            dataKey="actual"
-            stroke={CHART_THEME.line}
-            strokeWidth={2}
-            dot={{ fill: CHART_THEME.line, r: 3, strokeWidth: 0 }}
-            activeDot={{ fill: CHART_THEME.line, r: 5, strokeWidth: 0 }}
-            name={unit}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+      {/* Data points */}
+      {points.map((p, i) => (
+        <circle key={i} cx={p.x} cy={p.y} r="3" fill="var(--color-primary)" />
+      ))}
+    </svg>
   )
 }
 

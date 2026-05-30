@@ -67,7 +67,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
           <p className="text-sm text-muted mb-4">Get your body ready. Complete these mobility drills before starting.</p>
           <div className="space-y-2">
             {workout.warmup.map((ex, i) => (
-              <div key={i} className="glass rounded-xl p-4 flex items-center gap-3">
+              <div key={i} className="card rounded-xl p-4 flex items-center gap-3">
                 <span className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-500">
                   {i + 1}
                 </span>
@@ -165,7 +165,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
             <div className="text-center">
               <TimerCircle current={timer} total={currentExercise.targetHoldSeconds} label="Hold" />
               <div className="mt-4 flex items-center justify-center gap-3">
-                <button onClick={resetSet} className="p-3 rounded-xl glass hover:bg-gray-100 transition-colors">
+                <button onClick={resetSet} className="p-3 rounded-xl card hover:bg-gray-100 transition-colors">
                   <RotateCcw size={18} className="text-muted" />
                 </button>
               </div>
@@ -175,7 +175,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
               <p className="text-7xl font-display font-bold mb-2">{reps}</p>
               <p className="text-sm text-muted">Target: {currentExercise.targetReps} reps</p>
               <div className="mt-4 flex items-center justify-center gap-4">
-                <button onClick={decrementReps} className="w-14 h-14 rounded-full glass flex items-center justify-center hover:bg-gray-100 transition-colors">
+                <button onClick={decrementReps} className="w-14 h-14 rounded-full card flex items-center justify-center hover:bg-gray-100 transition-colors">
                   <Minus size={24} className="text-muted" />
                 </button>
                 <button onClick={incrementReps} className="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary-light transition-colors">
@@ -201,7 +201,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
             <button
               onClick={() => setFormQualityMet(!formQualityMet)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs transition-colors ${
-                formQualityMet ? 'bg-emerald-50 text-emerald-600' : 'glass text-muted hover:bg-gray-100'
+                formQualityMet ? 'bg-emerald-50 text-emerald-600' : 'card text-muted hover:bg-gray-100'
               }`}
             >
               <CheckCircle2 size={14} />
@@ -216,7 +216,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
               placeholder="Notes (optional)"
               value={notes}
               onChange={e => setNotes(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg glass text-sm text-center placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/30"
+              className="w-full px-3 py-2 rounded-lg card text-sm text-center placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </div>
         </div>
@@ -253,7 +253,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
         <p className="text-sm text-muted mb-6">Set {currentSet + 1} of {currentExercise?.targetSets}</p>
 
         {/* Next set preview */}
-        <div className="glass rounded-xl p-4 w-full max-w-xs mb-6">
+        <div className="card rounded-xl p-4 w-full max-w-xs mb-6">
           <p className="text-xs text-muted mb-1">Next Set</p>
           <p className="font-medium text-sm">{currentExercise?.name}</p>
           <p className="text-xs text-muted">
@@ -266,7 +266,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
 
         <button
           onClick={skipRest}
-          className="px-6 py-3 rounded-xl glass text-muted font-medium hover:bg-gray-100 transition-colors flex items-center gap-2"
+          className="px-6 py-3 rounded-xl card text-muted font-medium hover:bg-gray-100 transition-colors flex items-center gap-2"
         >
           <SkipForward size={16} /> Skip Rest
         </button>
@@ -292,7 +292,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
         </p>
 
         {nextExercise && (
-          <div className="glass rounded-xl p-4 w-full max-w-xs mb-6">
+          <div className="card rounded-xl p-4 w-full max-w-xs mb-6">
             <p className="text-xs text-muted mb-1">Up Next</p>
             <p className="font-medium text-sm">{nextExercise.name}</p>
             <p className="text-xs text-muted">
@@ -327,7 +327,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
         {/* Exercise summary */}
         <div className="w-full max-w-xs space-y-2 mb-6">
           {exerciseResults.map((result, i) => (
-            <div key={i} className="glass rounded-lg p-3 flex items-center gap-2">
+            <div key={i} className="card rounded-lg p-3 flex items-center gap-2">
               <span className={`w-2 h-2 rounded-full ${
                 result.performanceRating === 'success' ? 'bg-emerald-500' :
                 result.performanceRating === 'partial' ? 'bg-amber-500' : 'bg-red-400'

@@ -39,7 +39,7 @@ export default function Roadmap({ app, onSelectSkill }) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-display font-bold tracking-tight text-primary">Roadmap</h1>
-        <div className="flex gap-1 glass rounded-lg p-1">
+        <div className="flex gap-1 card rounded-lg p-1">
           <button
             onClick={() => setViewMode('list')}
             className={`p-1.5 rounded transition-colors ${viewMode === 'list' ? 'bg-primary text-black' : 'text-muted hover:text-primary'}`}
@@ -63,7 +63,7 @@ export default function Roadmap({ app, onSelectSkill }) {
           placeholder="Search skills..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl glass text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl card text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
         />
       </div>
 
@@ -77,7 +77,7 @@ export default function Roadmap({ app, onSelectSkill }) {
               <button
                 key={skill.id}
                 onClick={() => onSelectSkill && onSelectSkill(skill.id)}
-                className="w-full glass rounded-xl p-4 flex items-center gap-3 text-left hover:bg-gray-50 transition-colors"
+                className="w-full card rounded-xl p-4 flex items-center gap-3 text-left hover:bg-gray-50 transition-colors"
               >
                 <SkillStatusIcon status={status} />
                 <div className="flex-1 min-w-0">

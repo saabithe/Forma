@@ -56,7 +56,7 @@ export default function CalendarHeatmap({ state }) {
   if (weeks.length === 0) return null
 
   return (
-    <div className="glass rounded-xl p-4">
+    <div className="card rounded-xl p-4">
       <div className="flex items-center justify-between mb-3">
         <p className="text-xs text-muted uppercase tracking-wider flex items-center gap-1.5">
           <Calendar size={12} /> Activity

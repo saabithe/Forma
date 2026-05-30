@@ -34,7 +34,7 @@ export default function Progress({ app }) {
     return (
       <div className="space-y-6">
         <h1 className="text-3xl font-display font-bold tracking-tight text-primary">Progress</h1>
-        <div className="glass rounded-2xl p-8 text-center">
+        <div className="card rounded-2xl p-8 text-center">
           <TrendingUp size={48} className="text-muted mx-auto mb-4 opacity-30" />
           <p className="text-muted">Complete your first workout to see progress here.</p>
         </div>
@@ -47,7 +47,7 @@ export default function Progress({ app }) {
       <h1 className="text-3xl font-display font-bold tracking-tight text-primary">Progress</h1>
 
       {/* Exercise Selector */}
-      <div className="glass rounded-xl p-4">
+      <div className="card rounded-xl p-4">
         <p className="text-xs text-muted uppercase tracking-wider mb-2">Exercise</p>
         <select
           value={selectedId || ''}
@@ -64,7 +64,7 @@ export default function Progress({ app }) {
 
       {/* Chart */}
       {chartData.length > 0 ? (
-        <div className="glass rounded-xl p-4">
+        <div className="card rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <p className="text-xs text-muted uppercase tracking-wider">
               {selectedExercise?.name || selectedId}
@@ -81,7 +81,7 @@ export default function Progress({ app }) {
           <ProgressChart data={chartData} />
         </div>
       ) : (
-        <div className="glass rounded-xl p-6 text-center">
+        <div className="card rounded-xl p-6 text-center">
           <p className="text-muted text-sm">No data for this exercise yet.</p>
         </div>
       )}
@@ -89,7 +89,7 @@ export default function Progress({ app }) {
       {/* Stats Summary */}
       {selectedPR && (
         <div className="grid grid-cols-3 gap-3">
-          <div className="glass rounded-xl p-3 text-center">
+          <div className="card rounded-xl p-3 text-center">
             <p className="text-lg font-bold text-primary">
               {selectedPR.maxReps > 0 ? selectedPR.maxReps : `${selectedPR.maxHoldSeconds}s`}
             </p>
@@ -97,11 +97,11 @@ export default function Progress({ app }) {
               {selectedPR.maxReps > 0 ? 'Max Reps' : 'Max Hold'}
             </p>
           </div>
-          <div className="glass rounded-xl p-3 text-center">
+          <div className="card rounded-xl p-3 text-center">
             <p className="text-lg font-bold">{selectedPR.totalSessions}</p>
             <p className="text-[10px] text-muted">Sessions</p>
           </div>
-          <div className="glass rounded-xl p-3 text-center">
+          <div className="card rounded-xl p-3 text-center">
             <p className="text-lg font-bold">{Math.round(selectedPR.bestCompletionRate * 100)}%</p>
             <p className="text-[10px] text-muted">Best Rate</p>
           </div>
@@ -109,7 +109,7 @@ export default function Progress({ app }) {
       )}
 
       {/* All Personal Records */}
-      <div className="glass rounded-2xl p-5">
+      <div className="card rounded-2xl p-5">
         <h3 className="font-display font-semibold mb-3 text-sm text-muted uppercase tracking-wider flex items-center gap-2">
           <Trophy size={14} /> Personal Records
         </h3>

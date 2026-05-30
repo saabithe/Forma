@@ -102,7 +102,7 @@ export default function Home({ app }) {
 
       {/* Rest Day — auto-advances, shows brief card */}
       {isRestDay && (
-        <div className="glass-strong rounded-2xl overflow-hidden">
+        <div className="card-strong rounded-2xl overflow-hidden">
           <div className="bg-gradient-to-r from-gray-400 to-gray-500 px-6 py-4">
             <div className="flex items-center gap-2">
               <Coffee size={20} className="text-white/90" />
@@ -131,7 +131,7 @@ export default function Home({ app }) {
 
       {/* Completed Today — show done state + optional next */}
       {!isRestDay && completedToday && (
-        <div className="glass-strong rounded-2xl overflow-hidden">
+        <div className="card-strong rounded-2xl overflow-hidden">
           <div className={`bg-gradient-to-r ${dayColors[dayType] || dayColors.push} px-6 py-4`}>
             <div className="flex items-center gap-2">
               <CheckCircle2 size={20} className="text-white/90" />
@@ -144,7 +144,7 @@ export default function Home({ app }) {
 
       {/* Today's Routine — not yet completed */}
       {!isRestDay && !completedToday && routine && (
-        <div className="glass-strong rounded-2xl overflow-hidden glow-primary">
+        <div className="card-strong rounded-2xl overflow-hidden glow-primary">
           {/* Day type header */}
           <div className={`bg-gradient-to-r ${dayColors[dayType] || dayColors.push} px-6 py-3`}>
             <div className="flex items-center justify-between">
@@ -191,7 +191,7 @@ export default function Home({ app }) {
 
       {/* Optional Next Workout — only shown after completing today's */}
       {!isRestDay && completedToday && optionalNext && (
-        <div className="glass rounded-2xl overflow-hidden">
+        <div className="card rounded-2xl overflow-hidden">
           <div className={`bg-gradient-to-r ${dayColors[optionalNext.id] || dayColors.push} px-6 py-3 opacity-80`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -226,7 +226,7 @@ export default function Home({ app }) {
                 setActiveWorkoutRoutine(optionalNext)
                 setShowWorkout(true)
               }}
-              className="w-full py-3 rounded-xl glass text-primary font-display font-semibold hover:bg-gray-50 transition-colors text-base flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl card text-primary font-display font-semibold hover:bg-gray-50 transition-colors text-base flex items-center justify-center gap-2"
             >
               <ArrowRight size={18} /> Do Tomorrow's Workout Now
             </button>
@@ -235,7 +235,7 @@ export default function Home({ app }) {
       )}
 
       {/* Cycle Progress */}
-      <div className="glass rounded-xl p-4">
+      <div className="card rounded-xl p-4">
         <div className="flex items-center justify-between mb-2">
           <p className="text-xs text-muted uppercase tracking-wider">Weekly Cycle</p>
           <p className="text-xs text-muted">{totalDailySessions} sessions done</p>
@@ -275,7 +275,7 @@ export default function Home({ app }) {
           {(state.activeSkills || []).map((activeSkill, i) => {
             const skill = SKILLS.find(s => s.id === activeSkill.skillId)
             return (
-              <div key={i} className="glass rounded-xl p-4 flex items-center gap-3">
+              <div key={i} className="card rounded-xl p-4 flex items-center gap-3">
                 <div className={`w-2 h-2 rounded-full ${
                   categoryColors[skill?.category]?.includes('emerald') ? 'bg-emerald-500' :
                   categoryColors[skill?.category]?.includes('blue') ? 'bg-blue-500' :
@@ -297,7 +297,7 @@ export default function Home({ app }) {
       {!hasActiveSkills && (
         <button
           onClick={() => navigate('/roadmap')}
-          className="w-full glass rounded-xl p-4 flex items-center gap-3 text-left hover:bg-gray-50 transition-colors"
+          className="w-full card rounded-xl p-4 flex items-center gap-3 text-left hover:bg-gray-50 transition-colors"
         >
           <Target size={18} className="text-primary" />
           <div className="flex-1">
@@ -310,15 +310,15 @@ export default function Home({ app }) {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="glass rounded-xl p-3 text-center">
+        <div className="card rounded-xl p-3 text-center">
           <p className="text-lg font-bold text-primary">{totalDailySessions}</p>
           <p className="text-[10px] text-muted">Sessions</p>
         </div>
-        <div className="glass rounded-xl p-3 text-center">
+        <div className="card rounded-xl p-3 text-center">
           <p className="text-lg font-bold">{masteredCount}</p>
           <p className="text-[10px] text-muted">Skills Mastered</p>
         </div>
-        <div className="glass rounded-xl p-3 text-center">
+        <div className="card rounded-xl p-3 text-center">
           <p className="text-lg font-bold text-amber-500">{streak.current}</p>
           <p className="text-[10px] text-muted">Day Streak</p>
         </div>
@@ -326,7 +326,7 @@ export default function Home({ app }) {
 
       {/* Recent Activity */}
       {recentSessions.length > 0 && (
-        <div className="glass rounded-2xl p-5">
+        <div className="card rounded-2xl p-5">
           <h3 className="font-display font-semibold mb-3 text-sm text-muted uppercase tracking-wider flex items-center gap-2">
             <Calendar size={14} /> Recent Activity
           </h3>

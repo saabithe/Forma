@@ -29,14 +29,14 @@ export default function Profile({ app }) {
         <h1 className="text-3xl font-display font-bold tracking-tight text-primary">Profile</h1>
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className={`p-2.5 rounded-xl transition-colors ${showSettings ? 'bg-primary text-white' : 'glass text-muted hover:text-primary'}`}
+          className={`p-2.5 rounded-xl transition-colors ${showSettings ? 'bg-primary text-white' : 'card text-muted hover:text-primary'}`}
         >
           <Settings size={20} />
         </button>
       </div>
 
       {/* Identity Card */}
-      <div className="glass-strong rounded-2xl p-8 text-center glow-primary">
+      <div className="card-strong rounded-2xl p-8 text-center glow-primary">
         <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center mb-4 shadow-lg">
           <span className="text-3xl font-display font-bold text-white">
             {(state.user?.name || 'S')[0].toUpperCase()}
@@ -48,26 +48,26 @@ export default function Profile({ app }) {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="glass rounded-xl p-4 text-center">
+        <div className="card rounded-xl p-4 text-center">
           <p className="text-2xl font-bold text-primary">{masteredCount}</p>
           <p className="text-xs text-muted mt-0.5">Skills Mastered</p>
         </div>
-        <div className="glass rounded-xl p-4 text-center">
+        <div className="card rounded-xl p-4 text-center">
           <p className="text-2xl font-bold">{activeCount}</p>
           <p className="text-xs text-muted mt-0.5">Currently Training</p>
         </div>
-        <div className="glass rounded-xl p-4 text-center">
+        <div className="card rounded-xl p-4 text-center">
           <p className="text-2xl font-bold text-amber-500">{streak.current}</p>
           <p className="text-xs text-muted mt-0.5">Day Streak</p>
         </div>
-        <div className="glass rounded-xl p-4 text-center">
+        <div className="card rounded-xl p-4 text-center">
           <p className="text-2xl font-bold">{totalSessions}</p>
           <p className="text-xs text-muted mt-0.5">Total Sessions</p>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="glass rounded-xl p-4">
+      <div className="card rounded-xl p-4">
         <div className="flex justify-between text-sm mb-2">
           <span className="font-medium">Overall Progress</span>
           <span className="text-muted">{Math.round(progressPercent)}%</span>
@@ -79,7 +79,7 @@ export default function Profile({ app }) {
       </div>
 
       {/* Streak Info */}
-      <div className="glass rounded-xl p-4">
+      <div className="card rounded-xl p-4">
         <h3 className="font-display font-semibold text-sm mb-3">Streak</h3>
         <div className="flex items-center justify-between">
           <div>
@@ -95,7 +95,7 @@ export default function Profile({ app }) {
 
       {/* Settings Panel */}
       {showSettings && (
-        <div className="glass rounded-2xl p-5 space-y-4">
+        <div className="card rounded-2xl p-5 space-y-4">
           <h3 className="font-display font-semibold text-sm">Settings</h3>
 
           {/* Sound */}

@@ -45,13 +45,13 @@ export default function Onboarding({ onComplete }) {
     const startSkill = SKILLS[result.startIndex]
     return (
       <div className="min-h-screen flex items-center justify-center p-8 bg-bg">
-        <div className="glass-strong rounded-2xl p-10 max-w-lg w-full text-center">
+        <div className="card-strong rounded-2xl p-10 max-w-lg w-full text-center">
           <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center mb-5">
             <CheckCircle2 size={40} className="text-white" />
           </div>
           <h1 className="text-2xl font-display font-bold mb-2">Assessment Complete</h1>
           <p className="text-muted mb-6">Your starting point in the roadmap:</p>
-          <div className="glass rounded-xl p-5 mb-8">
+          <div className="card rounded-xl p-5 mb-8">
             <p className="text-xs text-muted uppercase tracking-wider mb-1">Starting Skill</p>
             <p className="text-xl font-display font-bold text-primary">{startSkill?.name}</p>
             <p className="text-sm text-muted mt-1">{startSkill?.category} &middot; Skill #{result.startIndex + 1}</p>
@@ -66,7 +66,7 @@ export default function Onboarding({ onComplete }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-8 bg-bg">
-      <div className="glass-strong rounded-2xl p-10 max-w-lg w-full">
+      <div className="card-strong rounded-2xl p-10 max-w-lg w-full">
         <div className="flex items-center gap-4 mb-8">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center">
             <Zap size={24} className="text-white" />
@@ -87,11 +87,11 @@ export default function Onboarding({ onComplete }) {
         <p className="text-muted mb-6">{current.description}</p>
 
         {current.type === 'number' ? (
-          <input type="number" value={value || ''} onChange={e => setAnswers({ ...answers, [current.field]: e.target.value })} placeholder={current.placeholder} className="w-full px-5 py-4 rounded-xl glass text-xl font-display text-center outline-none focus:ring-1 focus:ring-primary/30" autoFocus />
+          <input type="number" value={value || ''} onChange={e => setAnswers({ ...answers, [current.field]: e.target.value })} placeholder={current.placeholder} className="w-full px-5 py-4 rounded-xl card text-xl font-display text-center outline-none focus:ring-1 focus:ring-primary/30" autoFocus />
         ) : (
           <div className="space-y-2">
             {current.options.map(opt => (
-              <button key={opt.value} onClick={() => setAnswers({ ...answers, [current.field]: opt.value })} className={`w-full text-left px-5 py-3.5 rounded-xl transition-colors text-sm ${value === opt.value ? 'bg-primary text-white' : 'glass hover:bg-gray-50'}`}>
+              <button key={opt.value} onClick={() => setAnswers({ ...answers, [current.field]: opt.value })} className={`w-full text-left px-5 py-3.5 rounded-xl transition-colors text-sm ${value === opt.value ? 'bg-primary text-white' : 'card hover:bg-gray-50'}`}>
                 {opt.label}
               </button>
             ))}
@@ -100,7 +100,7 @@ export default function Onboarding({ onComplete }) {
 
         <div className="flex gap-3 mt-8">
           {step > 0 && (
-            <button onClick={() => setStep(step - 1)} className="px-5 py-3.5 rounded-xl glass font-semibold hover:bg-gray-50 transition-colors">
+            <button onClick={() => setStep(step - 1)} className="px-5 py-3.5 rounded-xl card font-semibold hover:bg-gray-50 transition-colors">
               <ArrowLeft size={16} />
             </button>
           )}

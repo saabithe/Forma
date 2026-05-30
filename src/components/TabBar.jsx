@@ -14,7 +14,7 @@ export default function TabBar() {
 
   return (
     <nav
-      className="fixed bottom-4 left-4 right-4 z-50 glass rounded-lg border-2 border-[var(--color-border)] max-w-md mx-auto"
+      className="fixed bottom-4 left-4 right-4 z-50 card rounded-lg border-2 border-[var(--color-border)] max-w-md mx-auto"
       style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)' }}
     >
       <div className="flex justify-around items-center h-16 px-2">

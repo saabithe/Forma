@@ -32,7 +32,7 @@ export default function PersonalRecords({ state, compact = false }) {
 
   // Full variant — scrollable list
   return (
-    <div className="glass rounded-2xl p-5">
+    <div className="card rounded-2xl p-5">
       <h3 className="font-display font-semibold mb-3 text-sm text-muted uppercase tracking-wider flex items-center gap-2">
         <Trophy size={14} /> Personal Records
       </h3>

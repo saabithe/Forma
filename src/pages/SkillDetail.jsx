@@ -149,7 +149,7 @@ export default function SkillDetail({ skillId, app, onBack }) {
 
       {/* Current Phase (if active) */}
       {isActive && currentPhase && (
-        <div className="glass-strong rounded-2xl p-5">
+        <div className="card-strong rounded-2xl p-5">
           <div className="flex items-center justify-between mb-3">
             <div>
               <p className="text-xs text-muted uppercase tracking-wider mb-1">Current Phase</p>
@@ -168,14 +168,14 @@ export default function SkillDetail({ skillId, app, onBack }) {
 
       {/* Level-Up Criteria (if in final phase) */}
       {isActive && currentPhaseIndex >= totalPhases - 1 && criteriaProgress.length > 0 && (
-        <div className="glass rounded-2xl p-5">
+        <div className="card rounded-2xl p-5">
           <p className="text-xs text-muted uppercase tracking-wider mb-3">Level-Up Criteria</p>
           <CriteriaTracker criteriaProgress={criteriaProgress} />
         </div>
       )}
 
       {/* Training Plan Overview */}
-      <div className="glass rounded-2xl p-5">
+      <div className="card rounded-2xl p-5">
         <div className="flex items-center justify-between mb-3">
           <p className="text-xs text-muted uppercase tracking-wider">Training Plan</p>
           <button
@@ -242,7 +242,7 @@ export default function SkillDetail({ skillId, app, onBack }) {
             </button>
             <button
               onClick={() => removeActiveSkill(skillId)}
-              className="py-3 px-4 rounded-xl glass text-muted font-medium hover:bg-gray-100 transition-colors text-sm"
+              className="py-3 px-4 rounded-xl card text-muted font-medium hover:bg-gray-100 transition-colors text-sm"
             >
               <Pause size={16} />
             </button>

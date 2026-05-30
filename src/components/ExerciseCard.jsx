@@ -8,7 +8,7 @@ export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
   if (!exercise) return null
 
   return (
-    <div className={`glass rounded-xl overflow-hidden transition-all ${isCurrent ? 'ring-2 ring-primary/30' : ''}`}>
+    <div className={`card rounded-xl overflow-hidden transition-all ${isCurrent ? 'ring-2 ring-primary/30' : ''}`}>
       {/* Header */}
       <div className="flex items-center gap-3 p-4">
         <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${
