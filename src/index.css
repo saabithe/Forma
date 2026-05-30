@@ -1,49 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Clash+Display:wght@400;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* Brutalist theme colors inspired by Aerko_ */
-  --color-primary: #CCFF00;      /* Acid green */
-  --color-primary-light: #E5FF33;
-  --color-primary-dark: #B0E500;
-  --color-accent: #CCFF00;       /* Same as primary for brutalist consistency */
-  --color-accent-light: #E5FF33;
-  --color-gray: #A0A0A0;
-  --color-bg: #0A0A0A;           /* Dark brutalist background */
-  --color-surface: #141414;      /* Slightly lighter surface */
-  --color-surface-hover: #1A1A1A;
-  --color-muted: #666666;
-  --color-border: #333333;
-  --color-text: #FFFFFF;        /* Brutalist white text */
-  --color-text-dim: #A0A0A0;    /* Dimmed text for secondary elements */
-  --font-sans: 'JetBrains Mono', monospace;  /* Code-like font */
-  --font-display: 'Clash Display', 'JetBrains Mono', sans-serif;
+  --color-primary: #174D38;
+  --color-primary-light: #1e6648;
+  --color-primary-dark: #0f3628;
+  --color-accent: #4D1717;
+  --color-accent-light: #6b2222;
+  --color-gray: #CBCBCB;
+  --color-bg: #F2F2F2;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F8F8F8;
+  --color-muted: #6b7280;
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-text: #1a1a1a;
+  --color-text-dim: #6b7280;
+  --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-display: 'Poppins', 'Outfit', system-ui, sans-serif;
 }
 
-/* Light mode brutalist theme */
-:root.light {
-  --color-bg: #FFFFFF;
-  --color-surface: #F5F5F5;
-  --color-surface-hover: #E8E8E8;
-  --color-text: #1A1A1A;
-  --color-text-dim: #666666;
-  --color-border: #CCCCCC;
-  --color-primary: #99CC00;
-  --color-primary-light: #B0E500;
-  --color-primary-dark: #88BB00;
-}
-
-/* Dark mode (default brutalist) */
 :root.dark {
-  --color-bg: #0A0A0A;
-  --color-surface: #141414;
-  --color-surface-hover: #1A1A1A;
-  --color-text: #FFFFFF;
-  --color-text-dim: #A0A0A0;
-  --color-border: #333333;
-  --color-primary: #CCFF00;
-  --color-primary-light: #E5FF33;
-  --color-primary-dark: #B0E500;
+  --color-bg: #0f0f0f;
+  --color-surface: #1a1a1a;
+  --color-surface-hover: #222222;
+  --color-text: #f0f0f0;
+  --color-text-dim: #888888;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-primary: #2d8b6e;
+  --color-primary-light: #3aa882;
+  --color-primary-dark: #1e6b50;
 }
 
 * {
@@ -60,73 +44,48 @@ body {
   min-height: 100vh;
 }
 
-/* Brutalist card — hard borders, surface bg, no blur */
+/* Card — clean white surfaces with subtle shadow */
 .card {
   background: var(--color-surface);
-  border: 2px solid var(--color-border);
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
   transition: all 0.2s ease;
 }
 
 .card:hover {
-  border-color: var(--color-primary);
-  box-shadow:
-    0 0 0 1px var(--color-primary),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
-/* Strong card — thicker border, deeper shadow */
+/* Strong card — elevated surface */
 .card-strong {
   background: var(--color-surface);
-  border: 3px solid var(--color-border);
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .card-strong:hover {
-  border-color: var(--color-primary);
-  box-shadow:
-    0 0 0 2px var(--color-primary),
-    0 4px 16px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* Brutalist glow effect - sharp edges with acid green glow */
 .glow-primary {
-  box-shadow:
-    0 0 0 2px var(--color-primary),
-    0 0 20px rgba(204, 255, 0, 0.3),
-    0 0 40px rgba(204, 255, 0, 0.1);
+  box-shadow: 0 0 0 1px rgba(23, 77, 56, 0.2), 0 0 20px rgba(23, 77, 56, 0.1);
 }
 
-.gradient-text {
-  background: linear-gradient(90deg, #00DEFF, #D946EF);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Brutalist progress bar - blocky design */
+/* Progress bar */
 .progress-bar {
   height: 8px;
-  background: var(--color-border);
-  border: 1px solid var(--color-border);
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.2),
-    0 1px 0 rgba(255, 255, 255, 0.1);
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: var(--color-primary);
-  box-shadow: 0 0 10px rgba(204, 255, 0, 0.5);
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+  border-radius: 999px;
+  transition: width 0.6s ease;
   position: relative;
+  overflow: hidden;
 }
 
 .progress-fill::after {
@@ -136,12 +95,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   animation: shimmer 2s infinite;
 }
 
@@ -156,21 +110,18 @@ body {
   border-radius: 999px;
 }
 
-/* Brutalist scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border: 2px solid var(--color-border);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  background: #ccc;
+  border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary-light);
-  box-shadow: 0 0 0 1px var(--color-primary);
+  background: #aaa;
 }

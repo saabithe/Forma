@@ -42,13 +42,13 @@ export default function Roadmap({ app, onSelectSkill }) {
         <div className="flex gap-1 card rounded-lg p-1">
           <button
             onClick={() => setViewMode('list')}
-            className={`p-1.5 rounded transition-colors ${viewMode === 'list' ? 'bg-primary text-black' : 'text-muted hover:text-primary'}`}
+            className={`p-1.5 rounded transition-colors ${viewMode === 'list' ? 'bg-primary text-white' : 'text-muted hover:text-primary'}`}
           >
             <LayoutList size={16} />
           </button>
           <button
             onClick={() => setViewMode('tree')}
-            className={`p-1.5 rounded transition-colors ${viewMode === 'tree' ? 'bg-primary text-black' : 'text-muted hover:text-primary'}`}
+            className={`p-1.5 rounded transition-colors ${viewMode === 'tree' ? 'bg-primary text-white' : 'text-muted hover:text-primary'}`}
           >
             <Network size={16} />
           </button>

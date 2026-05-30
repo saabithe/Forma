@@ -28,7 +28,7 @@ export default function TabBar() {
             {({ isActive }) => (
               <div className={`flex flex-col items-center gap-1 py-2 text-xs font-bold transition-all duration-200 ${
                 isActive
-                  ? `text-[${colors.accent}] drop-shadow-[0_0_8px_rgba(204,255,0,0.4)] scale-110`
+                  ? 'text-primary scale-110'
                   : 'text-[var(--color-text-dim)] hover:text-[var(--color-text)]'
               }`}>
                 <Icon

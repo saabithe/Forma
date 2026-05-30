@@ -7,8 +7,8 @@ const DAY_LABELS = ['', 'M', '', 'W', '', 'F', '']
 
 const COLORS = [
   'var(--color-surface)',           // level 0 — no workout
-  'rgba(204, 255, 0, 0.15)',       // level 1 — light
-  'rgba(204, 255, 0, 0.4)',        // level 2 — normal
+  'rgba(23, 77, 56, 0.15)',        // level 1 — light
+  'rgba(23, 77, 56, 0.4)',         // level 2 — normal
   'var(--color-primary)',           // level 3 — intense
 ]
 

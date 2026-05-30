@@ -53,9 +53,9 @@ export default function SkillTree({ skills, getSkillStatus, onSelectSkill }) {
                     ${isLocked
                       ? 'border-border bg-surface text-muted opacity-30 cursor-not-allowed'
                       : isActive
-                        ? 'border-primary bg-primary/20 text-primary cursor-pointer hover:scale-110 hover:shadow-[0_0_12px_rgba(204,255,0,0.3)]'
+                        ? 'border-primary bg-primary/10 text-primary cursor-pointer hover:scale-110'
                         : isMastered
-                          ? 'border-primary bg-primary text-black cursor-pointer hover:scale-110'
+                          ? 'border-primary bg-primary text-white cursor-pointer hover:scale-110'
                           : 'border-border bg-surface text-muted cursor-pointer hover:border-primary/50 hover:text-primary'
                     }
                   `}
