@@ -42,7 +42,7 @@ export default function Profile({ app }) {
             {(state.user?.name || 'S')[0].toUpperCase()}
           </span>
         </div>
-        <h2 className="text-xl font-display font-bold">{state.user?.name || 'SABITH THIRUNILATH'}</h2>
+        <h2 className="text-xl font-display font-bold">{state.user?.name || 'User'}</h2>
         <p className="text-sm text-muted mt-1">Level {Math.floor(masteredCount / 5) + 1}</p>
       </div>
 
@@ -103,7 +103,7 @@ export default function Profile({ app }) {
             <span className="text-sm">Timer Sound</span>
             <button
               onClick={() => updateSettings({ timerBeep: !state.settings?.timerBeep })}
-              className={`w-12 h-6 rounded-full transition-colors ${state.settings?.timerBeep ? 'bg-primary' : 'bg-gray-200'}`}
+              className={`w-12 h-6 rounded-full transition-colors ${state.settings?.timerBeep ? 'bg-primary' : 'bg-black/10'}`}
             >
               <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${state.settings?.timerBeep ? 'translate-x-6' : 'translate-x-0.5'}`} />
             </button>
@@ -113,12 +113,12 @@ export default function Profile({ app }) {
           <div className="pt-3 border-t border-border space-y-3">
             <h4 className="text-xs text-muted uppercase tracking-wider">Data Management</h4>
 
-            <button onClick={exportState} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+            <button onClick={exportState} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-black/[3%] transition-colors">
               <Download size={16} className="text-muted" />
               <span className="text-sm">Export Backup</span>
             </button>
 
-            <label className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+            <label className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-black/[3%] transition-colors cursor-pointer">
               <Upload size={16} className="text-muted" />
               <span className="text-sm">Import Backup</span>
               <input type="file" accept=".json" onChange={handleImport} className="hidden" />
@@ -133,15 +133,15 @@ export default function Profile({ app }) {
 
             <div className="pt-3 border-t border-border">
               {!confirmReset ? (
-                <button onClick={() => setConfirmReset(true)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 transition-colors">
+                <button onClick={() => setConfirmReset(true)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 transition-colors">
                   <Trash2 size={16} className="text-red-400" />
                   <span className="text-sm text-red-500">Reset All Data</span>
                 </button>
               ) : (
-                <div className="p-3 rounded-xl bg-red-50 space-y-2">
+                <div className="p-3 rounded-xl bg-red-500/10 space-y-2">
                   <p className="text-sm text-red-600 font-medium">Are you sure? This can not be undone.</p>
                   <div className="flex gap-2">
-                    <button onClick={resetAll} className="flex-1 py-2 rounded-lg bg-red-500 text-white text-sm font-medium">
+                    <button onClick={resetAll} className="flex-1 py-2 rounded-lg bg-red-500/100 text-white text-sm font-medium">
                       Yes, Reset
                     </button>
                     <button onClick={() => setConfirmReset(false)} className="flex-1 py-2 rounded-lg bg-white text-sm font-medium">

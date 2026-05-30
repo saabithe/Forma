@@ -11,7 +11,7 @@ const categoryColors = {
   Intermediate: 'border-blue-500 text-blue-400',
   Advanced: 'border-violet-500 text-violet-400',
   Elite: 'border-amber-500 text-amber-400',
-  Supporting: 'border-gray-500 text-gray-400',
+  Supporting: 'border-gray-500 text-muted/70',
 }
 
 const dayColors = {
@@ -93,7 +93,7 @@ export default function Home({ app }) {
           <p className="text-sm text-muted mt-0.5">Your daily workout</p>
         </div>
         {streak.current > 0 && (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 text-amber-600">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 text-amber-600">
             <Flame size={14} />
             <span className="text-sm font-semibold">{streak.current} day streak</span>
           </div>
@@ -162,7 +162,7 @@ export default function Home({ app }) {
             <div className="space-y-2 mb-5">
               {routine.exercises.map((ex, i) => (
                 <div key={i} className="flex items-center gap-3 text-sm">
-                  <span className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-500">
+                  <span className="w-5 h-5 rounded-full bg-black/5 flex items-center justify-center text-[10px] font-bold text-muted">
                     {i + 1}
                   </span>
                   <span className="flex-1 truncate">{ex.name}</span>
@@ -207,7 +207,7 @@ export default function Home({ app }) {
             <div className="space-y-2 mb-5">
               {optionalNext.exercises.map((ex, i) => (
                 <div key={i} className="flex items-center gap-3 text-sm">
-                  <span className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-500">
+                  <span className="w-5 h-5 rounded-full bg-black/5 flex items-center justify-center text-[10px] font-bold text-muted">
                     {i + 1}
                   </span>
                   <span className="flex-1 truncate">{ex.name}</span>
@@ -226,7 +226,7 @@ export default function Home({ app }) {
                 setActiveWorkoutRoutine(optionalNext)
                 setShowWorkout(true)
               }}
-              className="w-full py-3 rounded-xl card text-primary font-display font-semibold hover:bg-gray-50 transition-colors text-base flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl card text-primary font-display font-semibold hover:bg-black/[3%] transition-colors text-base flex items-center justify-center gap-2"
             >
               <ArrowRight size={18} /> Do Tomorrow's Workout Now
             </button>
@@ -246,8 +246,8 @@ export default function Home({ app }) {
               i === (dailyWorkout?.dayIndex ?? 0)
                 ? 'bg-primary ring-2 ring-primary/30'
                 : day === 'rest'
-                  ? 'bg-gray-200'
-                  : 'bg-gray-100'
+                  ? 'bg-black/10'
+                  : 'bg-black/5'
             }`} />
           ))}
         </div>
@@ -276,13 +276,13 @@ export default function Home({ app }) {
             const skill = SKILLS.find(s => s.id === activeSkill.skillId)
             return (
               <div key={i} className="card rounded-xl p-4 flex items-center gap-3">
-                <div className={`w-2 h-2 rounded-full ${
-                  categoryColors[skill?.category]?.includes('emerald') ? 'bg-emerald-500' :
-                  categoryColors[skill?.category]?.includes('blue') ? 'bg-blue-500' :
-                  categoryColors[skill?.category]?.includes('violet') ? 'bg-violet-500' :
-                  categoryColors[skill?.category]?.includes('amber') ? 'bg-amber-500' :
-                  'bg-gray-400'
-                }`} />
+                <div className={`w-2 h-2 rounded-full ${{
+                  Beginner: 'bg-emerald-500',
+                  Intermediate: 'bg-blue-500',
+                  Advanced: 'bg-violet-500',
+                  Elite: 'bg-amber-500',
+                  Supporting: 'bg-gray-400',
+                }[skill?.category] || 'bg-gray-400'}`} />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{skill?.name || activeSkill.skillId}</p>
                   <p className="text-xs text-muted">{skill?.category || 'Training'}</p>
@@ -297,7 +297,7 @@ export default function Home({ app }) {
       {!hasActiveSkills && (
         <button
           onClick={() => navigate('/roadmap')}
-          className="w-full card rounded-xl p-4 flex items-center gap-3 text-left hover:bg-gray-50 transition-colors"
+          className="w-full card rounded-xl p-4 flex items-center gap-3 text-left hover:bg-black/[3%] transition-colors"
         >
           <Target size={18} className="text-primary" />
           <div className="flex-1">
@@ -342,8 +342,8 @@ export default function Home({ app }) {
               return (
                 <div key={i} className="flex items-center gap-3 text-sm py-1">
                   <div className={`w-2 h-2 rounded-full ${
-                    s.overallRating === 'success' ? 'bg-emerald-500' :
-                    s.overallRating === 'partial' ? 'bg-amber-500' : 'bg-red-400'
+                    s.overallRating === 'success' ? 'bg-emerald-500/100' :
+                    s.overallRating === 'partial' ? 'bg-amber-500/100' : 'bg-red-400'
                   }`} />
                   <span className="text-muted text-xs w-20 shrink-0">{s.date}</span>
                   <span className="flex-1 truncate">{skill?.name || s.skillId || s.dayType || 'Workout'}</span>

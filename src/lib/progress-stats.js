@@ -198,10 +198,10 @@ export function getSessionPRs(state, sessionExercises) {
     const isHold = exerciseDef?.type === 'hold' || ex.sets?.[0]?.holdSeconds !== undefined
 
     for (const set of (ex.sets || [])) {
-      if (isHold && (set.holdSeconds || 0) >= record.maxHoldSeconds && set.holdSeconds > 0) {
+      if (isHold && (set.holdSeconds || 0) > record.maxHoldSeconds && set.holdSeconds > 0) {
         prs.push(id)
         break
-      } else if (!isHold && (set.reps || 0) >= record.maxReps && set.reps > 0) {
+      } else if (!isHold && (set.reps || 0) > record.maxReps && set.reps > 0) {
         prs.push(id)
         break
       }

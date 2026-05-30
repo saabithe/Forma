@@ -2,7 +2,8 @@
 // Beginner: start at 0, Intermediate: ~35, Advanced: ~74
 
 export function scoreAssessment(answers) {
-  const { pullUps, pushUps, plankSeconds, mobility, control } = answers
+  if (!answers) return { level: 'beginner', startIndex: 0 }
+  const { pullUps = 0, pushUps = 0, plankSeconds = 0, mobility = 0, control = 0 } = answers
 
   let score = 0
   if (pullUps >= 10) score += 2

@@ -12,11 +12,11 @@ const categoryColors = {
 }
 
 const categoryStyles = {
-  emerald: { dot: 'bg-emerald-500', ring: 'ring-emerald-300', text: 'text-emerald-700', bg: 'bg-emerald-50' },
-  blue: { dot: 'bg-blue-500', ring: 'ring-blue-300', text: 'text-blue-700', bg: 'bg-blue-50' },
-  violet: { dot: 'bg-violet-500', ring: 'ring-violet-300', text: 'text-violet-700', bg: 'bg-violet-50' },
-  amber: { dot: 'bg-amber-500', ring: 'ring-amber-300', text: 'text-amber-700', bg: 'bg-amber-50' },
-  gray: { dot: 'bg-gray-400', ring: 'ring-gray-300', text: 'text-gray-600', bg: 'bg-gray-50' },
+  emerald: { dot: 'bg-emerald-500', ring: 'ring-emerald-300', text: 'text-emerald-600', bg: 'bg-emerald-500/10' },
+  blue: { dot: 'bg-blue-500', ring: 'ring-blue-300', text: 'text-blue-600', bg: 'bg-blue-500/10' },
+  violet: { dot: 'bg-violet-500', ring: 'ring-violet-300', text: 'text-violet-600', bg: 'bg-violet-500/10' },
+  amber: { dot: 'bg-amber-500', ring: 'ring-amber-300', text: 'text-amber-600', bg: 'bg-amber-500/10' },
+  gray: { dot: 'bg-gray-400', ring: 'ring-gray-300', text: 'text-muted', bg: 'bg-black/5' },
 }
 
 export default function Roadmap({ app, onSelectSkill }) {
@@ -77,7 +77,7 @@ export default function Roadmap({ app, onSelectSkill }) {
               <button
                 key={skill.id}
                 onClick={() => onSelectSkill && onSelectSkill(skill.id)}
-                className="w-full card rounded-xl p-4 flex items-center gap-3 text-left hover:bg-gray-50 transition-colors"
+                className="w-full card rounded-xl p-4 flex items-center gap-3 text-left hover:bg-black/[3%] transition-colors"
               >
                 <SkillStatusIcon status={status} />
                 <div className="flex-1 min-w-0">
@@ -148,7 +148,7 @@ export default function Roadmap({ app, onSelectSkill }) {
                       className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-colors ${
                         status === 'locked' ? 'opacity-40' :
                         status === 'active' ? `${style.bg} ring-1 ring-primary/20` :
-                        'hover:bg-gray-50'
+                        'hover:bg-black/[3%]'
                       }`}
                     >
                       <SkillStatusIcon status={status} />

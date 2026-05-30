@@ -3,16 +3,16 @@ import { ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react'
 
 export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
   const [expanded, setExpanded] = useState(false)
-  const execution = exercise.execution
 
   if (!exercise) return null
+  const execution = exercise.execution
 
   return (
     <div className={`card rounded-xl overflow-hidden transition-all ${isCurrent ? 'ring-2 ring-primary/30' : ''}`}>
       {/* Header */}
       <div className="flex items-center gap-3 p-4">
         <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${
-          isCurrent ? 'bg-primary text-white' : 'bg-gray-100 text-gray-500'
+          isCurrent ? 'bg-primary text-white' : 'bg-black/5 text-muted'
         }`}>
           {exerciseIndex + 1}
         </div>
@@ -29,7 +29,7 @@ export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
         {exercise.targetMuscles?.length > 0 && (
           <div className="hidden sm:flex gap-1 flex-wrap justify-end max-w-[140px]">
             {exercise.targetMuscles.slice(0, 2).map(m => (
-              <span key={m} className="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500">{m}</span>
+              <span key={m} className="text-[10px] px-1.5 py-0.5 rounded-full bg-black/5 text-muted">{m}</span>
             ))}
           </div>
         )}
@@ -38,7 +38,7 @@ export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
       {/* Warmup Note */}
       {exercise.warmupNote && (
         <div className="px-4 pb-2">
-          <div className="flex items-start gap-2 text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2">
+          <div className="flex items-start gap-2 text-xs text-amber-600 bg-amber-500/10 rounded-lg px-3 py-2">
             <AlertTriangle size={12} className="mt-0.5 shrink-0" />
             <span>{exercise.warmupNote}</span>
           </div>
@@ -50,7 +50,7 @@ export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
         <>
           <button
             onClick={() => setExpanded(!expanded)}
-            className="w-full flex items-center justify-between px-4 py-2 text-xs text-primary hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-between px-4 py-2 text-xs text-primary hover:bg-black/[3%] transition-colors"
           >
             <span className="font-medium">Execution Tips</span>
             {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -61,11 +61,11 @@ export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
               {/* Setup */}
               {execution.setup?.length > 0 && (
                 <div>
-                  <p className="font-semibold text-gray-700 mb-1">Setup</p>
+                  <p className="font-semibold text mb-1">Setup</p>
                   <ul className="space-y-1">
                     {execution.setup.map((tip, i) => (
                       <li key={i} className="text-muted flex gap-2">
-                        <span className="text-gray-300">•</span>
+                        <span className="text-muted/50">•</span>
                         <span>{tip}</span>
                       </li>
                     ))}
@@ -76,11 +76,11 @@ export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
               {/* Movement */}
               {execution.movement?.length > 0 && (
                 <div>
-                  <p className="font-semibold text-gray-700 mb-1">Movement</p>
+                  <p className="font-semibold text mb-1">Movement</p>
                   <ul className="space-y-1">
                     {execution.movement.map((tip, i) => (
                       <li key={i} className="text-muted flex gap-2">
-                        <span className="text-gray-300">•</span>
+                        <span className="text-muted/50">•</span>
                         <span>{tip}</span>
                       </li>
                     ))}
@@ -91,7 +91,7 @@ export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
               {/* Tempo */}
               {execution.tempo && (
                 <div>
-                  <p className="font-semibold text-gray-700 mb-1">Tempo</p>
+                  <p className="font-semibold text mb-1">Tempo</p>
                   <p className="text-muted">{execution.tempo}</p>
                 </div>
               )}
@@ -99,7 +99,7 @@ export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
               {/* Breathing */}
               {execution.breathing && (
                 <div>
-                  <p className="font-semibold text-gray-700 mb-1">Breathing</p>
+                  <p className="font-semibold text mb-1">Breathing</p>
                   <p className="text-muted">{execution.breathing}</p>
                 </div>
               )}
@@ -137,13 +137,13 @@ export default function ExerciseCard({ exercise, exerciseIndex, isCurrent }) {
               {/* Form Checkpoints */}
               {execution.formCheckpoints?.length > 0 && (
                 <div>
-                  <p className="font-semibold text-gray-700 mb-1">Form Checkpoints</p>
+                  <p className="font-semibold text mb-1">Form Checkpoints</p>
                   <ul className="space-y-1">
                     {execution.formCheckpoints.map((cp, i) => (
                       <li key={i} className="text-muted">
                         <span className="font-medium">{cp.checkpoint}</span>
                         <span className="text-emerald-500 ml-1">→ {cp.yes}</span>
-                        <span className="text-gray-400 ml-1">/ {cp.no}</span>
+                        <span className="text-muted/70 ml-1">/ {cp.no}</span>
                       </li>
                     ))}
                   </ul>

@@ -61,7 +61,7 @@ export function computeAdjustedPrescription(basePrescription, progressionRules, 
     rule = progressionRules.on_fail
   }
 
-  const adjustment = rule.adjustments || {}
+  const adjustment = rule?.adjustments || {}
 
   // Apply adjustment to the last session's ACTUAL targets (not the base)
   // Targets are stored inside each set entry, so extract from the last set

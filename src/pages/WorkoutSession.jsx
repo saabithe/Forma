@@ -58,7 +58,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
             <p className="text-xs text-muted uppercase tracking-wider">Warmup</p>
             <h1 className="text-xl font-display font-bold">{workout.phaseName || workout.skillId}</h1>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100">
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-black/5">
             <X size={18} className="text-muted" />
           </button>
         </div>
@@ -68,7 +68,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
           <div className="space-y-2">
             {workout.warmup.map((ex, i) => (
               <div key={i} className="card rounded-xl p-4 flex items-center gap-3">
-                <span className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-500">
+                <span className="w-5 h-5 rounded-full bg-black/5 flex items-center justify-center text-[10px] font-bold text-muted">
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
@@ -103,7 +103,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
             <p className="text-xs text-muted uppercase tracking-wider">{workout.phaseName}</p>
             <h1 className="text-xl font-display font-bold">{workout.skillName || workout.skillId}</h1>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100">
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-black/5">
             <X size={18} className="text-muted" />
           </button>
         </div>
@@ -148,12 +148,12 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowExecutionTips(!showExecutionTips)}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-lg hover:bg-black/5 transition-colors"
               title="Toggle execution tips"
             >
               {showExecutionTips ? <EyeOff size={16} className="text-muted" /> : <Eye size={16} className="text-muted" />}
             </button>
-            <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100">
+            <button onClick={onClose} className="p-2 rounded-lg hover:bg-black/5">
               <X size={18} className="text-muted" />
             </button>
           </div>
@@ -165,7 +165,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
             <div className="text-center">
               <TimerCircle current={timer} total={currentExercise.targetHoldSeconds} label="Hold" />
               <div className="mt-4 flex items-center justify-center gap-3">
-                <button onClick={resetSet} className="p-3 rounded-xl card hover:bg-gray-100 transition-colors">
+                <button onClick={resetSet} className="p-3 rounded-xl card hover:bg-black/5 transition-colors">
                   <RotateCcw size={18} className="text-muted" />
                 </button>
               </div>
@@ -175,7 +175,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
               <p className="text-7xl font-display font-bold mb-2">{reps}</p>
               <p className="text-sm text-muted">Target: {currentExercise.targetReps} reps</p>
               <div className="mt-4 flex items-center justify-center gap-4">
-                <button onClick={decrementReps} className="w-14 h-14 rounded-full card flex items-center justify-center hover:bg-gray-100 transition-colors">
+                <button onClick={decrementReps} className="w-14 h-14 rounded-full card flex items-center justify-center hover:bg-black/5 transition-colors">
                   <Minus size={24} className="text-muted" />
                 </button>
                 <button onClick={incrementReps} className="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary-light transition-colors">
@@ -189,9 +189,9 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
           <div className="flex gap-2 mt-6">
             {Array.from({ length: currentExercise.targetSets }).map((_, i) => (
               <div key={i} className={`w-2.5 h-2.5 rounded-full ${
-                i < setResults.length ? (setResults[i].completed ? 'bg-emerald-500' : 'bg-red-400') :
+                i < setResults.length ? (setResults[i].completed ? 'bg-emerald-500/100' : 'bg-red-400') :
                 i === setResults.length ? 'bg-primary ring-2 ring-primary/30' :
-                'bg-gray-200'
+                'bg-black/10'
               }`} />
             ))}
           </div>
@@ -201,7 +201,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
             <button
               onClick={() => setFormQualityMet(!formQualityMet)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs transition-colors ${
-                formQualityMet ? 'bg-emerald-50 text-emerald-600' : 'card text-muted hover:bg-gray-100'
+                formQualityMet ? 'bg-emerald-500/10 text-emerald-600' : 'card text-muted hover:bg-black/5'
               }`}
             >
               <CheckCircle2 size={14} />
@@ -216,7 +216,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
               placeholder="Notes (optional)"
               value={notes}
               onChange={e => setNotes(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg card text-sm text-center placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/30"
+              className="w-full px-3 py-2 rounded-lg card text-sm text-center placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </div>
         </div>
@@ -232,7 +232,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
             onClick={completeSet}
             className={`w-full py-3.5 rounded-xl font-display font-semibold transition-colors flex items-center justify-center gap-2 ${
               targetMet
-                ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+                ? 'bg-emerald-500/100 text-white hover:bg-emerald-600'
                 : 'bg-primary text-white hover:bg-primary-light'
             }`}
           >
@@ -266,7 +266,7 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
 
         <button
           onClick={skipRest}
-          className="px-6 py-3 rounded-xl card text-muted font-medium hover:bg-gray-100 transition-colors flex items-center gap-2"
+          className="px-6 py-3 rounded-xl card text-muted font-medium hover:bg-black/5 transition-colors flex items-center gap-2"
         >
           <SkipForward size={16} /> Skip Rest
         </button>
@@ -329,8 +329,8 @@ export default function WorkoutSession({ workout, onDismiss, onClose, settings }
           {exerciseResults.map((result, i) => (
             <div key={i} className="card rounded-lg p-3 flex items-center gap-2">
               <span className={`w-2 h-2 rounded-full ${
-                result.performanceRating === 'success' ? 'bg-emerald-500' :
-                result.performanceRating === 'partial' ? 'bg-amber-500' : 'bg-red-400'
+                result.performanceRating === 'success' ? 'bg-emerald-500/100' :
+                result.performanceRating === 'partial' ? 'bg-amber-500/100' : 'bg-red-400'
               }`} />
               <span className="flex-1 text-sm truncate">{result.exerciseId}</span>
               <span className={`text-xs font-medium ${
@@ -362,40 +362,40 @@ function ExecutionTipsPanel({ execution, onClose }) {
     <div className="fixed bottom-0 left-0 right-0 z-[110] bg-surface border-t border-border rounded-t-2xl max-h-[60vh] overflow-y-auto">
       <div className="sticky top-0 bg-surface px-6 py-3 flex items-center justify-between border-b border-border">
         <p className="font-semibold text-sm">Execution Tips</p>
-        <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-100">
+        <button onClick={onClose} className="p-1 rounded-lg hover:bg-black/5">
           <X size={16} className="text-muted" />
         </button>
       </div>
       <div className="px-6 py-4 space-y-4 text-xs">
         {execution.setup?.length > 0 && (
           <div>
-            <p className="font-semibold text-gray-700 mb-1">Setup</p>
+            <p className="font-semibold text mb-1">Setup</p>
             <ul className="space-y-1">
               {execution.setup.map((tip, i) => (
-                <li key={i} className="text-muted flex gap-2"><span className="text-gray-300">•</span><span>{tip}</span></li>
+                <li key={i} className="text-muted flex gap-2"><span className="text-muted/50">•</span><span>{tip}</span></li>
               ))}
             </ul>
           </div>
         )}
         {execution.movement?.length > 0 && (
           <div>
-            <p className="font-semibold text-gray-700 mb-1">Movement</p>
+            <p className="font-semibold text mb-1">Movement</p>
             <ul className="space-y-1">
               {execution.movement.map((tip, i) => (
-                <li key={i} className="text-muted flex gap-2"><span className="text-gray-300">•</span><span>{tip}</span></li>
+                <li key={i} className="text-muted flex gap-2"><span className="text-muted/50">•</span><span>{tip}</span></li>
               ))}
             </ul>
           </div>
         )}
         {execution.tempo && (
           <div>
-            <p className="font-semibold text-gray-700 mb-1">Tempo</p>
+            <p className="font-semibold text mb-1">Tempo</p>
             <p className="text-muted">{execution.tempo}</p>
           </div>
         )}
         {execution.breathing && (
           <div>
-            <p className="font-semibold text-gray-700 mb-1">Breathing</p>
+            <p className="font-semibold text mb-1">Breathing</p>
             <p className="text-muted">{execution.breathing}</p>
           </div>
         )}

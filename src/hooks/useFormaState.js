@@ -4,9 +4,33 @@ import { SKILLS } from '../data/curriculum'
 import { useWorkoutEngine } from './useWorkoutEngine'
 import { useProgression } from './useProgression'
 import { useDailyWorkout } from './useDailyWorkout'
-import { generateSessionId, rateExercisePerformance, rateWorkout } from '../lib/progression'
+import { generateSessionId, rateWorkout } from '../lib/progression'
 import { getTrainingPlan } from '../data/training-plans'
 import { checkPhaseCriteria, checkLevelUpCriteria } from '../lib/criteria'
+import { getTodayLocal, getYesterdayLocal } from '../lib/dates'
+import { DEFAULT_SCHEDULE } from '../data/daily-routines'
+
+/**
+ * Compute updated streak from previous streak state
+ */
+function computeStreak(prevStreak, today, yesterday) {
+  const lastDate = prevStreak?.lastWorkoutDate
+  const streak = { ...prevStreak }
+
+  if (lastDate === today) {
+    // Already worked out today — no change
+  } else if (lastDate === yesterday) {
+    streak.current = (streak.current || 0) + 1
+    streak.longest = Math.max(streak.longest || 0, streak.current)
+    streak.lastWorkoutDate = today
+  } else {
+    streak.current = 1
+    streak.longest = Math.max(streak.longest || 0, 1)
+    streak.lastWorkoutDate = today
+  }
+
+  return streak
+}
 
 export function useFormaState() {
   const [state, setState] = useState(() => loadState())
@@ -38,14 +62,14 @@ export function useFormaState() {
 
     const session = {
       id: generateSessionId(),
-      date: new Date().toISOString().slice(0, 10),
+      date: getTodayLocal(),
       dayType,
       exercises: exerciseResults,
       overallRating,
       duration,
     }
 
-    const today = new Date().toISOString().slice(0, 10)
+    const today = getTodayLocal()
 
     setState(prev => {
       const daily = prev.dailyWorkout || {}
@@ -53,25 +77,10 @@ export function useFormaState() {
       const newTotalSessions = (daily.totalSessions || 0) + 1
 
       // Advance to next day in schedule
-      const schedule = daily.schedule || ['push', 'pull', 'legs', 'rest', 'upper', 'lower', 'rest']
+      const schedule = daily.schedule || DEFAULT_SCHEDULE
       const nextDayIndex = ((daily.currentDayIndex || 0) + 1) % schedule.length
 
-      // Update streak
-      const lastDate = prev.streak?.lastWorkoutDate
-      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
-      let newStreak = { ...prev.streak }
-
-      if (lastDate === today) {
-        // Already worked out today
-      } else if (lastDate === yesterday) {
-        newStreak.current = (newStreak.current || 0) + 1
-        newStreak.longest = Math.max(newStreak.longest || 0, newStreak.current)
-        newStreak.lastWorkoutDate = today
-      } else {
-        newStreak.current = 1
-        newStreak.longest = Math.max(newStreak.longest || 0, 1)
-        newStreak.lastWorkoutDate = today
-      }
+      const newStreak = computeStreak(prev.streak, today, getYesterdayLocal())
 
       return {
         ...prev,
@@ -94,7 +103,7 @@ export function useFormaState() {
   const skipRestDay = useCallback(() => {
     setState(prev => {
       const daily = prev.dailyWorkout || {}
-      const schedule = daily.schedule || ['push', 'pull', 'legs', 'rest', 'upper', 'lower', 'rest']
+      const schedule = daily.schedule || DEFAULT_SCHEDULE
       const nextDayIndex = ((daily.currentDayIndex || 0) + 1) % schedule.length
       return {
         ...prev,
@@ -115,7 +124,7 @@ export function useFormaState() {
 
     const session = {
       id: generateSessionId(),
-      date: new Date().toISOString().slice(0, 10),
+      date: getTodayLocal(),
       skillId,
       phaseId,
       exercises: exerciseResults,
@@ -128,22 +137,8 @@ export function useFormaState() {
       const newHistory = [...(prev.workoutHistory || []), session]
 
       // Update streak
-      const today = new Date().toISOString().slice(0, 10)
-      const lastDate = prev.streak?.lastWorkoutDate
-      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
-      let newStreak = { ...prev.streak }
-
-      if (lastDate === today) {
-        // Already worked out today, no change
-      } else if (lastDate === yesterday) {
-        newStreak.current = (newStreak.current || 0) + 1
-        newStreak.longest = Math.max(newStreak.longest || 0, newStreak.current)
-        newStreak.lastWorkoutDate = today
-      } else {
-        newStreak.current = 1
-        newStreak.longest = Math.max(newStreak.longest || 0, 1)
-        newStreak.lastWorkoutDate = today
-      }
+      const today = getTodayLocal()
+      const newStreak = computeStreak(prev.streak, today, getYesterdayLocal())
 
       return {
         ...prev,
@@ -164,7 +159,7 @@ export function useFormaState() {
 
     const session = {
       id: generateSessionId(),
-      date: new Date().toISOString().slice(0, 10),
+      date: getTodayLocal(),
       skillId,
       phaseId,
       exercises: exerciseResults,
@@ -178,23 +173,8 @@ export function useFormaState() {
     setState(prev => {
       const newHistory = [...(prev.workoutHistory || []), session]
 
-      // Update streak
-      const today = new Date().toISOString().slice(0, 10)
-      const lastDate = prev.streak?.lastWorkoutDate
-      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
-      let newStreak = { ...prev.streak }
-
-      if (lastDate === today) {
-        // Already worked out today, no change
-      } else if (lastDate === yesterday) {
-        newStreak.current = (newStreak.current || 0) + 1
-        newStreak.longest = Math.max(newStreak.longest || 0, newStreak.current)
-        newStreak.lastWorkoutDate = today
-      } else {
-        newStreak.current = 1
-        newStreak.longest = Math.max(newStreak.longest || 0, 1)
-        newStreak.lastWorkoutDate = today
-      }
+      const today = getTodayLocal()
+      const newStreak = computeStreak(prev.streak, today, getYesterdayLocal())
 
       // Check phase advancement against the fresh history
       const freshState = { ...prev, workoutHistory: newHistory, streak: newStreak }
@@ -243,7 +223,8 @@ export function useFormaState() {
   }, [])
 
   /**
-   * Check and handle phase advancement after a workout
+   * @deprecated Use recordSkillWorkoutAndCheck instead — this function reads stale state
+   * and will produce wrong results if called after a setState without a re-render.
    */
   const checkAndAdvancePhase = useCallback((skillId) => {
     const shouldAdvance = progression.checkPhaseAdvance(skillId)

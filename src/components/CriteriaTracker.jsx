@@ -23,7 +23,7 @@ export default function CriteriaTracker({ criteriaProgress }) {
                 {criterion.description}
               </p>
               {!criterion.met && (
-                <div className="mt-1 h-1 rounded-full bg-gray-100 overflow-hidden">
+                <div className="mt-1 h-1 rounded-full bg-black/5 overflow-hidden">
                   <div
                     className="h-full rounded-full bg-primary/60 transition-all"
                     style={{ width: `${percent}%` }}

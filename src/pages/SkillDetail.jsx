@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft, Play, CheckCircle2, Lock } from 'lucide-react'
+import { ArrowLeft, Play, Pause, CheckCircle2, Lock } from 'lucide-react'
 import { SKILLS } from '../data/curriculum'
 import { checkLevelUpCriteria } from '../lib/criteria'
 import { computeSessionPrescriptions } from '../lib/progression'
@@ -117,18 +117,18 @@ export default function SkillDetail({ skillId, app, onBack }) {
   }
 
   const categoryColors = {
-    Beginner: 'bg-emerald-100 text-emerald-700',
-    Intermediate: 'bg-blue-100 text-blue-700',
-    Advanced: 'bg-violet-100 text-violet-700',
-    Elite: 'bg-amber-100 text-amber-700',
-    Supporting: 'bg-gray-100 text-gray-600',
+    Beginner: 'bg-emerald-500/10 text-emerald-600',
+    Intermediate: 'bg-blue-500/10 text-blue-600',
+    Advanced: 'bg-violet-500/10 text-violet-600',
+    Elite: 'bg-amber-500/10 text-amber-600',
+    Supporting: 'bg-black/5 text-muted',
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-start gap-3">
-        <button onClick={onBack} className="mt-1 p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+        <button onClick={onBack} className="mt-1 p-1.5 rounded-lg hover:bg-black/5 transition-colors">
           <ArrowLeft size={18} className="text-muted" />
         </button>
         <div className="flex-1">
@@ -242,13 +242,13 @@ export default function SkillDetail({ skillId, app, onBack }) {
             </button>
             <button
               onClick={() => removeActiveSkill(skillId)}
-              className="py-3 px-4 rounded-xl card text-muted font-medium hover:bg-gray-100 transition-colors text-sm"
+              className="py-3 px-4 rounded-xl card text-muted font-medium hover:bg-black/5 transition-colors text-sm"
             >
               <Pause size={16} />
             </button>
           </>
         ) : isMastered ? (
-          <div className="flex-1 py-3 rounded-xl bg-emerald-50 text-emerald-600 font-medium text-center text-sm">
+          <div className="flex-1 py-3 rounded-xl bg-emerald-500/10 text-emerald-600 font-medium text-center text-sm">
             Skill Mastered
           </div>
         ) : (

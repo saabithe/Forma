@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom'
 import { Home, Route, User, TrendingUp } from 'lucide-react'
-import { useTheme } from '../theme/ThemeContext'
 
 const tabs = [
   { to: '/', icon: Home, label: 'Dashboard' },
@@ -10,8 +9,6 @@ const tabs = [
 ]
 
 export default function TabBar() {
-  const { colors } = useTheme()
-
   return (
     <nav
       className="fixed bottom-4 left-4 right-4 z-50 card rounded-lg border-2 border-[var(--color-border)] max-w-md mx-auto"

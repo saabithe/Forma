@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { getRoutine, getDifficultyLevel, DEFAULT_SCHEDULE } from '../data/daily-routines'
 import { getExercise } from '../data/exercises'
 import { estimateDuration } from '../lib/duration'
+import { getTodayLocal } from '../lib/dates'
 
 // Adjust a single prescription based on exercise history and routine progression config
 function adjustFromHistory(prescription, exerciseHistory, progression) {
@@ -39,7 +40,7 @@ export function useDailyWorkout(state) {
   return useMemo(() => {
     const daily = state?.dailyWorkout
     const schedule = daily?.schedule || DEFAULT_SCHEDULE
-    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+    const today = getTodayLocal() // YYYY-MM-DD
 
     // Schedule only advances on completion (recordDailyWorkout increments currentDayIndex)
     // No calendar-based advancement — missing a day doesn't skip anything

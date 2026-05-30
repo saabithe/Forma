@@ -91,7 +91,7 @@ export default function Onboarding({ onComplete }) {
         ) : (
           <div className="space-y-2">
             {current.options.map(opt => (
-              <button key={opt.value} onClick={() => setAnswers({ ...answers, [current.field]: opt.value })} className={`w-full text-left px-5 py-3.5 rounded-xl transition-colors text-sm ${value === opt.value ? 'bg-primary text-white' : 'card hover:bg-gray-50'}`}>
+              <button key={opt.value} onClick={() => setAnswers({ ...answers, [current.field]: opt.value })} className={`w-full text-left px-5 py-3.5 rounded-xl transition-colors text-sm ${value === opt.value ? 'bg-primary text-white' : 'card hover:bg-black/[3%]'}`}>
                 {opt.label}
               </button>
             ))}
@@ -100,11 +100,11 @@ export default function Onboarding({ onComplete }) {
 
         <div className="flex gap-3 mt-8">
           {step > 0 && (
-            <button onClick={() => setStep(step - 1)} className="px-5 py-3.5 rounded-xl card font-semibold hover:bg-gray-50 transition-colors">
+            <button onClick={() => setStep(step - 1)} className="px-5 py-3.5 rounded-xl card font-semibold hover:bg-black/[3%] transition-colors">
               <ArrowLeft size={16} />
             </button>
           )}
-          <button onClick={handleNext} disabled={!canProceed} className={`flex-1 py-3.5 rounded-xl font-display font-semibold transition-colors flex items-center justify-center gap-2 ${canProceed ? 'bg-primary text-white hover:bg-primary-light' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
+          <button onClick={handleNext} disabled={!canProceed} className={`flex-1 py-3.5 rounded-xl font-display font-semibold transition-colors flex items-center justify-center gap-2 ${canProceed ? 'bg-primary text-white hover:bg-primary-light' : 'bg-black/10 text-muted/70 cursor-not-allowed'}`}>
             {step === STEPS.length - 1 ? 'Finish' : 'Next'} <ArrowRight size={16} />
           </button>
         </div>

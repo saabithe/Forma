@@ -98,10 +98,6 @@ export default function CalendarHeatmap({ state }) {
             {weeks.map((week, wi) => (
               <div key={wi} className="flex flex-col gap-0.5">
                 {Array.from({ length: 7 }, (_, dayIndex) => {
-                  const cell = week.find((_, ci) => {
-                    // Reconstruct day of week from position in week
-                    return true
-                  })
                   const day = week[dayIndex]
                   if (!day) {
                     return <div key={dayIndex} className="w-3 h-3" />

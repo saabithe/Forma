@@ -26,7 +26,8 @@ function playBeep() {
   } catch (e) { console.error(e); }
 }
 
-export function useWorkoutSession(exercises, onComplete, settings) {
+export function useWorkoutSession(exercises = [], onComplete, settings) {
+  const safeExercises = Array.isArray(exercises) ? exercises : []
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
   const [currentSet, setCurrentSet] = useState(1)
   const [phase, setPhase] = useState('intro') // intro, active, rest, between-exercises, complete
@@ -42,7 +43,7 @@ export function useWorkoutSession(exercises, onComplete, settings) {
   const intervalRef = useRef(null)
   const totalIntervalRef = useRef(null)
 
-  const currentExercise = exercises[currentExerciseIndex] || null
+  const currentExercise = safeExercises[currentExerciseIndex] || null
 
   // Initialize timer when exercise changes
   useEffect(() => {
@@ -157,7 +158,7 @@ export function useWorkoutSession(exercises, onComplete, settings) {
     const newExerciseResults = [...exerciseResults, exerciseResult]
     setExerciseResults(newExerciseResults)
 
-    if (currentExerciseIndex < exercises.length - 1) {
+    if (currentExerciseIndex < safeExercises.length - 1) {
       // More exercises
       setPhase('between-exercises')
     } else {
@@ -237,7 +238,7 @@ export function useWorkoutSession(exercises, onComplete, settings) {
     setTimer,
 
     // Computed
-    totalExercises: exercises.length,
-    isLastExercise: currentExerciseIndex >= exercises.length - 1,
+    totalExercises: safeExercises.length,
+    isLastExercise: currentExerciseIndex >= safeExercises.length - 1,
   }
 }

@@ -3,10 +3,30 @@
 // Uses the existing workout data from curriculum.js as seed
 
 import { SKILLS } from '../curriculum'
+import { getExercise } from '../exercises'
+
+/**
+ * Resolve exerciseId — use the skillId if it exists in the exercise registry,
+ * otherwise try common patterns (singular, hyphenated variants)
+ */
+function resolveExerciseId(skillId) {
+  if (getExercise(skillId)) return skillId
+  // Try singular form (e.g., 'pull-ups' -> 'pull-up' or 'pullup-standard')
+  const singular = skillId.replace(/s$/, '')
+  if (getExercise(singular)) return singular
+  // Try with -standard suffix
+  if (getExercise(`${skillId}-standard`)) return `${skillId}-standard`
+  // Try without trailing 's' and with -standard
+  if (getExercise(`${singular}-standard`)) return `${singular}-standard`
+  // Return the skillId as last resort — will produce a graceful "unknown exercise" display
+  return skillId
+}
 
 export function generateDefaultPlan(skillId) {
   const skill = SKILLS.find(s => s.id === skillId)
   if (!skill || !skill.workout) return null
+
+  const exerciseId = resolveExerciseId(skillId)
 
   const { workout } = skill
 
@@ -25,7 +45,7 @@ export function generateDefaultPlan(skillId) {
           },
           exercises: [
             {
-              exerciseId: skillId,
+              exerciseId,
               prescription: {
                 type: 'hold',
                 targetSets: workout.sets,
@@ -51,7 +71,7 @@ export function generateDefaultPlan(skillId) {
           },
           exercises: [
             {
-              exerciseId: skillId,
+              exerciseId,
               prescription: {
                 type: 'hold',
                 targetSets: workout.sets,
@@ -97,7 +117,7 @@ export function generateDefaultPlan(skillId) {
         },
         exercises: [
           {
-            exerciseId: skillId,
+            exerciseId,
             prescription: {
               type: 'reps',
               targetSets: workout.sets,
@@ -123,7 +143,7 @@ export function generateDefaultPlan(skillId) {
         },
         exercises: [
           {
-            exerciseId: skillId,
+            exerciseId,
             prescription: {
               type: 'reps',
               targetSets: workout.sets,

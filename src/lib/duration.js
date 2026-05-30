@@ -4,6 +4,7 @@
  * @returns {number} Estimated duration in minutes
  */
 export function estimateDuration(exercises) {
+  if (!exercises || exercises.length === 0) return 0
   let totalSeconds = 0
   for (const ex of exercises) {
     const sets = ex.targetSets || 3

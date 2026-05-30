@@ -8,7 +8,7 @@ export default function PhaseIndicator({ currentPhaseIndex, totalPhases, phaseNa
             className={`w-2 h-2 rounded-full transition-colors ${
               i < currentPhaseIndex ? 'bg-emerald-500' :
               i === currentPhaseIndex ? 'bg-primary ring-2 ring-primary/30' :
-              'bg-gray-200'
+              'bg-black/10'
             }`}
           />
         ))}
